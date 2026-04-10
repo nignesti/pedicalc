@@ -23,7 +23,7 @@ function App() {
 
   return (
     <PatientProvider>
-    <div className="flex min-h-screen flex-col bg-slate-50 dark:bg-slate-950">
+    <div className="flex min-h-dvh flex-col bg-slate-50 pt-safe dark:bg-slate-950">
       <DisclaimerBanner />
 
       <main className="flex-1">
@@ -38,7 +38,7 @@ function App() {
         {view.name === 'devices' && <DevicesPage onNavigate={setView} />}
       </main>
 
-      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
+      <footer className="border-t border-slate-200 bg-white pt-4 pb-safe-or-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
         <p>
           PediCalc · Strumento educativo e formativo · Non sostituisce il giudizio clinico del
           professionista sanitario

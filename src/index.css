@@ -11,10 +11,36 @@
 
   body {
     @apply bg-slate-50 text-slate-900 antialiased transition-colors dark:bg-slate-950 dark:text-slate-100;
+    /* Disabilita rimbalzo/pull-to-refresh accidentale in PWA */
+    overscroll-behavior: none;
+  }
+
+  /* Rimuove il flash grigio/blu al tocco su iOS */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Elimina il delay 300ms su elementi interattivi */
+  button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
   }
 
   :focus-visible {
     @apply outline-none ring-2 ring-brand-500 ring-offset-2 ring-offset-white dark:ring-offset-slate-950;
+  }
+}
+
+@layer utilities {
+  /* Safe area per Dynamic Island (top) e home indicator (bottom) */
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  /* Versione "minima" — non scende sotto un valore base */
+  .pb-safe-or-4 {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0px));
   }
 }
 
