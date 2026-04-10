@@ -108,7 +108,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
             >
               Età{' '}
-              <span className="normal-case font-normal text-slate-400">(opzionale)</span>
+              <span className="normal-case font-normal text-slate-400 dark:text-slate-500">(opzionale)</span>
             </label>
             <div className="flex gap-2">
               <input

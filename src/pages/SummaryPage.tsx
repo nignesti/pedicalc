@@ -170,12 +170,12 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           {/* Info paziente */}
           <div className="card flex flex-wrap items-center gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Peso</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Peso</p>
               <p className="text-3xl font-bold text-brand-600 dark:text-brand-400">{weightNum} kg</p>
             </div>
             {ageNum !== undefined && Number.isFinite(ageNum) && (
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Età</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Età</p>
                 <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">
                   {ageNum} {ageUnit}
                 </p>
@@ -183,9 +183,9 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
             )}
             {deviceBand && (
               <div className="ml-auto">
-                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Fascia</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Fascia</p>
                 <p className="text-xl font-bold text-slate-700 dark:text-slate-300">{deviceBand.label}</p>
-                <p className="text-xs text-slate-500">{deviceBand.weightLabel}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{deviceBand.weightLabel}</p>
               </div>
             )}
           </div>
@@ -200,26 +200,26 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: 'vital-signs' })}
-                  className="text-xs text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition"
+                  className="text-xs text-slate-400 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition"
                 >
                   dettaglio →
                 </button>
               </div>
               <div className="grid grid-cols-4 gap-2 text-center">
                 <div>
-                  <p className="text-xs text-slate-500">FR</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">FR</p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{vitalSigns.respiratoryRate}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">FC</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">FC</p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{vitalSigns.heartRate}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">PAs range</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">PAs range</p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{vitalSigns.systolicBPRange}</p>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-500">PAs min</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">PAs min</p>
                   <p className="text-sm font-bold text-slate-800 dark:text-slate-200">{vitalSigns.systolicBPMin}</p>
                 </div>
               </div>

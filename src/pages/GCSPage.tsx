@@ -207,7 +207,7 @@ export function GCSPage({ onNavigate }: GCSPageProps) {
           <ScorePill label="M" value={motoria} max={6} />
           <span className="text-slate-300 dark:text-slate-600 font-light text-lg">=</span>
           <div className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Totale</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Totale</p>
             <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">
               {hasAll ? total : `${total}?`}
             </p>
@@ -260,8 +260,8 @@ export function GCSPage({ onNavigate }: GCSPageProps) {
 
       {/* Legenda soglie */}
       <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">Soglie cliniche</p>
-        <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Soglie cliniche</p>
+        <div className="space-y-1.5 text-xs text-slate-600 dark:text-slate-300">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-rose-500 flex-shrink-0" />
             <span><strong>≤ 8</strong> — Possibile necessità di intubazione/ventilazione e monitoraggio PIC</span>
@@ -275,7 +275,7 @@ export function GCSPage({ onNavigate }: GCSPageProps) {
             <span><strong>15</strong> — Massimo punteggio</span>
           </div>
         </div>
-        <p className="mt-3 text-xs text-slate-400 dark:text-slate-500">
+        <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
           Se il paziente è intubato, non cosciente o preverbale, la risposta motoria è la componente più importante.
         </p>
       </div>
@@ -286,9 +286,9 @@ export function GCSPage({ onNavigate }: GCSPageProps) {
 function ScorePill({ label, value, max }: { label: string; value: number | null; max: number }) {
   return (
     <div className="text-center">
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">{label}</p>
       <p className={`text-lg font-bold tabular-nums ${value !== null ? 'text-brand-600 dark:text-brand-400' : 'text-slate-300 dark:text-slate-600'}`}>
-        {value ?? '—'}<span className="text-xs font-normal text-slate-400">/{max}</span>
+        {value ?? '—'}<span className="text-xs font-normal text-slate-400 dark:text-slate-500">/{max}</span>
       </p>
     </div>
   );

@@ -151,7 +151,7 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
                 Glasgow Coma Scale modificata per lattanti e bambini
               </p>
             </div>
-            <span className="text-2xl text-violet-300 dark:text-violet-600 transition group-hover:translate-x-1">→</span>
+            <span className="text-2xl text-violet-500 dark:text-violet-400 transition group-hover:translate-x-1">→</span>
           </button>
         </div>
       </div>
