@@ -10,7 +10,7 @@
  */
 
 /** Unità di misura del risultato di un calcolo. */
-export type DoseUnit = 'mg' | 'mcg' | 'mL' | 'J' | 'gocce' | 'fiala' | 'fiale';
+export type DoseUnit = 'mg' | 'mcg' | 'mL' | 'J' | 'gocce' | 'fiala' | 'fiale' | 'mEq';
 
 /** Via di somministrazione. */
 export type Route =

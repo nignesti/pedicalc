@@ -1,56 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 const STORAGE_KEY = 'pedicalc-disclaimer-ack';
+const SHIFT_MS = 8 * 60 * 60 * 1000; // 8 ore
 
-/**
- * Banner di disclaimer mostrato al primo avvio.
- * L'utente deve confermare di aver letto per accedere all'app.
- * Dopo la conferma, il banner non riappare (stato salvato in localStorage).
- * Un pulsante in alto resta sempre visibile per richiamarlo.
- */
+function isAcknowledgedRecently(): boolean {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const ts = parseInt(raw, 10);
+    return Number.isFinite(ts) && Date.now() - ts < SHIFT_MS;
+  } catch {
+    return false;
+  }
+}
+
+function saveAcknowledgment() {
+  try {
+    localStorage.setItem(STORAGE_KEY, String(Date.now()));
+  } catch { /* noop */ }
+}
+
 export function DisclaimerBanner() {
-  const [acknowledged, setAcknowledged] = useState<boolean>(true);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    setAcknowledged(saved === 'yes');
-  }, []);
+  const [acknowledged, setAcknowledged] = useState(isAcknowledgedRecently);
+  const [checked, setChecked] = useState(false);
 
   function acknowledge() {
-    localStorage.setItem(STORAGE_KEY, 'yes');
+    if (!checked) return;
+    saveAcknowledgment();
     setAcknowledged(true);
   }
 
   if (acknowledged) {
     return (
-      <header className="border-b border-slate-200 bg-white">
+      <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-2">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
               P
             </div>
-            <span className="text-sm font-semibold text-slate-900">PediCalc</span>
+            <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              PediCalc
+            </span>
           </div>
-          <button
-            type="button"
-            onClick={() => {
-              localStorage.removeItem(STORAGE_KEY);
-              setAcknowledged(false);
-            }}
-            className="text-xs font-medium text-slate-500 underline-offset-2 hover:text-brand-700 hover:underline"
-          >
-            Mostra avviso
-          </button>
+          <ThemeToggle />
         </div>
       </header>
     );
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm">
-      <div className="max-w-lg rounded-2xl bg-white p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm dark:bg-slate-950/80">
+      <div className="max-w-lg rounded-2xl bg-white p-6 shadow-2xl dark:bg-slate-900">
         <div className="mb-4 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -65,9 +68,11 @@ export function DisclaimerBanner() {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900">Avviso importante</h2>
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
+            Avviso importante
+          </h2>
         </div>
-        <div className="space-y-3 text-sm leading-relaxed text-slate-700">
+        <div className="space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <p>
             <strong>PediCalc</strong> è uno strumento di natura{' '}
             <strong>educativa e formativa</strong>.
@@ -82,12 +87,24 @@ export function DisclaimerBanner() {
             contestualizzati al singolo paziente.
           </p>
         </div>
+        <label className="mt-5 flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-800">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => setChecked(e.target.checked)}
+            className="mt-0.5 h-5 w-5 cursor-pointer rounded border-slate-300 text-brand-600 focus:ring-brand-500 dark:border-slate-600 dark:bg-slate-900"
+          />
+          <span className="text-sm font-medium text-slate-800 dark:text-slate-200">
+            Ho letto e compreso
+          </span>
+        </label>
         <button
           type="button"
           onClick={acknowledge}
-          className="btn-primary mt-6 w-full"
+          disabled={!checked}
+          className="btn-primary mt-4 w-full disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Ho letto e compreso
+          Accedi all'app
         </button>
       </div>
     </div>

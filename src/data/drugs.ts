@@ -14,6 +14,73 @@ import type { Drug } from '../types/drug';
 
 export const drugs: Drug[] = [
   {
+    id: 'acido-tranexamico',
+    name: 'Acido Tranexamico',
+    category: 'farmaco',
+    indications: [
+      {
+        id: 'default',
+        label: 'Emorragia',
+        rule: {
+          kind: 'weight-based',
+          factor: 15,
+          unit: 'mg',
+          route: 'EV',
+          maxDose: 1000,
+          decimals: 0,
+          notes:
+            'Somministrare in 10-20 minuti. Idealmente entro 1 ora dal trauma.',
+        },
+      },
+    ],
+  },
+
+  {
+    id: 'bicarbonato',
+    name: 'Bicarbonato di sodio',
+    category: 'farmaco',
+    indications: [
+      {
+        id: 'default',
+        label: 'Acidosi metabolica / ACR prolungato',
+        rule: {
+          kind: 'weight-based',
+          factor: 1,
+          unit: 'mEq',
+          route: 'EV',
+          maxDose: 50,
+          decimals: 0,
+          notes:
+            'Sol. 8.4% (1 mL = 1 mEq). Diluire 1:1 con SF prima della somministrazione. Usare solo in ACR prolungato, acidosi metabolica severa documentata o iperkaliemia grave.',
+        },
+      },
+    ],
+  },
+
+  {
+    id: 'glucosio',
+    name: 'Glucosio 10%',
+    category: 'farmaco',
+    indications: [
+      {
+        id: 'default',
+        label: 'Ipoglicemia sintomatica',
+        rule: {
+          kind: 'weight-range',
+          factorMin: 5,
+          factorMax: 10,
+          unit: 'mL',
+          route: 'EV/IO',
+          maxDose: 250,
+          decimals: 0,
+          notes:
+            'Somministrare in 5-10 min. Monitorare glicemia dopo 15-20 min. Non usare concentrazioni > 10% in vena periferica.',
+        },
+      },
+    ],
+  },
+
+  {
     id: 'adenosina',
     name: 'Adenosina',
     category: 'farmaco',
@@ -114,9 +181,10 @@ export const drugs: Drug[] = [
           factor: 5,
           unit: 'mg',
           route: 'EV',
+          maxDose: 300,
           decimals: 0,
           notes:
-            'Somministrare lentamente (20-60 minuti), eccetto in arresto cardiaco (bolo rapido).',
+            'In ACR: bolo rapido EV/IO. In tachiaritmia con polso: infondere in 20-60 minuti.',
         },
       },
     ],
@@ -130,15 +198,15 @@ export const drugs: Drug[] = [
       {
         id: 'default',
         label: 'Bradicardia sintomatica',
-        description: 'Anche per avvelenamento da organofosforici',
         rule: {
           kind: 'weight-based',
           factor: 0.02,
           unit: 'mg',
-          route: 'EV',
+          route: 'EV/IO',
           minDose: 0.1,
-          maxDose: 0.5,
+          maxDose: 1,
           decimals: 2,
+          notes: 'Dose minima 0.1 mg (evitare bradicardia paradossa). Ripetibile ogni 5 min, max 2 dosi.',
         },
       },
     ],
@@ -169,30 +237,7 @@ export const drugs: Drug[] = [
           unit: 'gocce',
           route: 'Aerosol',
           decimals: 0,
-          notes: 'Abbinare sempre Clenil 1/2 fiala. Diluire in 2-3 mL di soluzione fisiologica.',
-        },
-      },
-    ],
-  },
-
-  {
-    id: 'diazepam',
-    name: 'Diazepam',
-    category: 'farmaco',
-    indications: [
-      {
-        id: 'convulsioni',
-        label: 'Crisi convulsive',
-        description: 'Stato di male epilettico',
-        rule: {
-          kind: 'weight-based',
-          factor: 0.2,
-          unit: 'mg',
-          route: 'EV/Rettale',
-          maxDose: 10,
-          decimals: 2,
-          notes:
-            'Somministrare lentamente. Monitorare la respirazione — rischio di depressione respiratoria.',
+          notes: 'Abbinare sempre Clenil (mezza fiala). Diluire in 2-3 mL di soluzione fisiologica.',
         },
       },
     ],
@@ -249,6 +294,7 @@ export const drugs: Drug[] = [
           factor: 1,
           unit: 'mcg',
           route: 'EV/IO',
+          maxDose: 100,
           decimals: 1,
           notes:
             'Somministrare lentamente. Rischio di depressione respiratoria e rigidità toracica.',
@@ -347,8 +393,8 @@ export const drugs: Drug[] = [
       },
       {
         id: 'sedazione',
-        label: 'Sedazione',
-        description: 'Dose dissociativa',
+        label: 'Sedazione / RSI',
+        description: 'Dose dissociativa — sedazione procedurale o induzione RSI',
         rule: {
           kind: 'weight-range',
           factorMin: 1,
@@ -368,14 +414,16 @@ export const drugs: Drug[] = [
     indications: [
       {
         id: 'default',
-        label: 'Sedazione procedurale / anestesia locale',
+        label: 'Aritmie ventricolari',
+        description: 'TV con polso / FV refrattaria (alternativa ad amiodarone)',
         rule: {
           kind: 'weight-based',
           factor: 1,
           unit: 'mg',
           route: 'EV',
+          maxDose: 100,
           decimals: 1,
-          notes: 'Fiala standard 10 mg/mL (1%).',
+          notes: 'Bolo EV in 1-2 min. Fiala standard 10 mg/mL (1%). Max 3 mg/kg in infusione nelle 24h.',
         },
       },
     ],
@@ -427,6 +475,28 @@ export const drugs: Drug[] = [
   },
 
   {
+    id: 'magnesio-solfato',
+    name: 'Magnesio solfato',
+    category: 'farmaco',
+    indications: [
+      {
+        id: 'default',
+        label: 'Asma grave refrattaria',
+        rule: {
+          kind: 'weight-based',
+          factor: 25,
+          unit: 'mg',
+          route: 'EV',
+          maxDose: 2000,
+          decimals: 0,
+          notes:
+            'Diluire in 20 mL di SF e infondere in 20-30 min. Monitorare FC e PA durante l\'infusione.',
+        },
+      },
+    ],
+  },
+
+  {
     id: 'midazolam',
     name: 'Midazolam',
     category: 'farmaco',
@@ -440,7 +510,7 @@ export const drugs: Drug[] = [
           factor: 0.1,
           unit: 'mg',
           route: 'EV',
-          maxDose: 2,
+          maxDose: 5,
           decimals: 2,
         },
         routeVariants: [
@@ -452,7 +522,7 @@ export const drugs: Drug[] = [
               factor: 0.1,
               unit: 'mg',
               route: 'EV',
-              maxDose: 2,
+              maxDose: 5,
               decimals: 2,
             },
           },
@@ -542,6 +612,7 @@ export const drugs: Drug[] = [
           factor: 0.1,
           unit: 'mg',
           route: 'EV',
+          maxDose: 5,
           decimals: 2,
           notes: 'Somministrare lentamente. Rischio di depressione respiratoria.',
         },
@@ -578,18 +649,31 @@ export const drugs: Drug[] = [
     category: 'farmaco',
     indications: [
       {
-        id: 'default',
-        label: 'Dolore e febbre',
+        id: 'sotto-10kg',
+        label: '< 10 kg',
+        description: '7.5 mg/kg — neonati e lattanti',
         rule: {
-          kind: 'weight-band',
-          bands: [
-            { minKg: 0.1, maxKg: 9.99, displayValue: '7.5 mg/kg' },
-            { minKg: 10, displayValue: '15 mg/kg' },
-          ],
+          kind: 'weight-based',
+          factor: 7.5,
           unit: 'mg',
           route: 'EV',
-          notes:
-            'Non superare la dose massima giornaliera. Intervallo minimo 6 ore tra le somministrazioni.',
+          maxDose: 75,
+          decimals: 0,
+          notes: 'Intervallo minimo 6 ore. Max dose giornaliera 30 mg/kg/die.',
+        },
+      },
+      {
+        id: 'sopra-10kg',
+        label: '≥ 10 kg',
+        description: '15 mg/kg — bambini',
+        rule: {
+          kind: 'weight-based',
+          factor: 15,
+          unit: 'mg',
+          route: 'EV',
+          maxDose: 1000,
+          decimals: 0,
+          notes: 'Intervallo minimo 6 ore. Max dose giornaliera 60 mg/kg/die (max 3 g/die).',
         },
       },
     ],
@@ -601,17 +685,29 @@ export const drugs: Drug[] = [
     category: 'farmaco',
     indications: [
       {
-        id: 'default',
-        label: 'Intubazione a sequenza rapida (RSI)',
-        description: 'Blocco neuromuscolare',
+        id: 'rsi',
+        label: 'RSI',
+        description: 'Intubazione a sequenza rapida — blocco neuromuscolare',
         rule: {
-          kind: 'weight-range',
-          factorMin: 0.6,
-          factorMax: 1.2,
+          kind: 'weight-based',
+          factor: 1.2,
           unit: 'mg',
           route: 'EV',
           decimals: 1,
-          notes: 'Tempo per curarizzazione: 60-70 secondi.',
+          notes: 'Curarizzazione in 45-60 secondi.',
+        },
+      },
+      {
+        id: 'elezione',
+        label: 'Elezione',
+        description: 'Intubazione programmata — blocco neuromuscolare',
+        rule: {
+          kind: 'weight-based',
+          factor: 0.6,
+          unit: 'mg',
+          route: 'EV',
+          decimals: 1,
+          notes: 'Curarizzazione in 60-90 secondi.',
         },
       },
     ],
@@ -623,17 +719,30 @@ export const drugs: Drug[] = [
     category: 'farmaco',
     indications: [
       {
-        id: 'default',
-        label: 'Intubazione a sequenza rapida (RSI)',
-        description: 'Blocco neuromuscolare a breve durata',
+        id: 'sotto-10kg',
+        label: '< 10 kg',
+        description: 'RSI — neonati e lattanti (2 mg/kg)',
+        rule: {
+          kind: 'weight-based',
+          factor: 2,
+          unit: 'mg',
+          route: 'EV/IO',
+          decimals: 0,
+          notes: 'Insorgenza 30-60 sec. Durata 5-10 min. Dose aumentata per maggior volume di distribuzione nel lattante.',
+        },
+      },
+      {
+        id: 'sopra-10kg',
+        label: '≥ 10 kg',
+        description: 'RSI — bambini (1-2 mg/kg)',
         rule: {
           kind: 'weight-range',
           factorMin: 1,
           factorMax: 2,
           unit: 'mg',
-          route: 'EV',
-          decimals: 1,
-          notes: 'Insorgenza 30-60 secondi. Durata d\'azione 5-10 minuti.',
+          route: 'EV/IO',
+          decimals: 0,
+          notes: 'Insorgenza 30-60 sec. Durata 5-10 min.',
         },
       },
     ],

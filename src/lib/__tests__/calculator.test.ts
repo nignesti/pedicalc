@@ -89,6 +89,33 @@ describe('calculator - weight-based', () => {
     expect(result.entries[0].value).toBe('8.00');
   });
 
+  it('Acido Tranexamico 15 mg/kg × 20 kg = 300 mg', () => {
+    const rule: DosageRule = {
+      kind: 'weight-based',
+      factor: 15,
+      unit: 'mg',
+      route: 'EV',
+      maxDose: 1000,
+      decimals: 0,
+    };
+    const result = calculate(rule, { weightKg: 20 });
+    expect(result.entries[0].value).toBe('300');
+  });
+
+  it('Acido Tranexamico capped a 1000 mg su peso 80 kg', () => {
+    const rule: DosageRule = {
+      kind: 'weight-based',
+      factor: 15,
+      unit: 'mg',
+      route: 'EV',
+      maxDose: 1000,
+      decimals: 0,
+    };
+    const result = calculate(rule, { weightKg: 80 });
+    expect(result.entries[0].value).toBe('1000');
+    expect(result.entries[0].note).toContain('massima');
+  });
+
   it('Liquidi 20 mL/kg × 15 kg = 300 mL (0 decimali)', () => {
     const rule: DosageRule = {
       kind: 'weight-based',
