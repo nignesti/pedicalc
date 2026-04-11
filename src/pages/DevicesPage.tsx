@@ -241,6 +241,26 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
         {band && <ResultCard band={band} />}
       </div>
 
+      {/* Pulsante Maschera di Venturi */}
+      <button
+        type="button"
+        onClick={() => onNavigate({ name: 'venturi' })}
+        className="group mt-4 flex w-full items-center justify-between rounded-2xl border-2 border-cyan-200 bg-cyan-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-cyan-700 dark:bg-cyan-950/30"
+      >
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-cyan-500 dark:text-cyan-400">
+            Strumento
+          </p>
+          <p className="text-base font-bold text-cyan-900 dark:text-cyan-100">
+            Maschera di Venturi
+          </p>
+          <p className="text-xs text-cyan-700/70 dark:text-cyan-300/70">
+            Filtri colorati — L/min e FiO₂
+          </p>
+        </div>
+        <span className="text-2xl text-cyan-300 dark:text-cyan-600 transition group-hover:translate-x-1">→</span>
+      </button>
+
       {/* Link a Elettricità */}
       <div className="mt-4 text-center">
         <button
