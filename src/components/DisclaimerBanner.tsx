@@ -36,9 +36,7 @@ export function DisclaimerBanner() {
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-2">
           <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
-              P
-            </div>
+            <img src="/pwa-192x192.png" alt="PediCalc" className="h-8 w-8 rounded-lg" />
             <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               PediCalc
             </span>
