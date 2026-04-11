@@ -149,7 +149,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
         )}
 
         {currentIndication?.description && (
-          <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">
+          <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">
             {currentIndication.description}
           </p>
         )}
@@ -236,7 +236,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
         )}
 
         {result && (
-          <div className="mt-6 rounded-2xl border-2 border-brand-200 bg-brand-50 p-5 dark:border-brand-700 dark:bg-brand-950/40">
+          <div className="mt-6 rounded-2xl border-2 border-brand-200 bg-brand-50 p-5 dark:border-brand-600 dark:bg-slate-800">
             <p className="text-xs font-semibold uppercase tracking-wide text-brand-700 dark:text-brand-300">
               Dose calcolata
             </p>
@@ -244,7 +244,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
               {result.entries.map((entry, idx) => (
                 <div key={idx} className="flex items-baseline gap-3">
                   {entry.label && (
-                    <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+                    <span className="text-sm font-medium text-slate-600 dark:text-slate-300">
                       {entry.label}:
                     </span>
                   )}
@@ -255,7 +255,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
                     {entry.unit}
                   </span>
                   {entry.route && (
-                    <span className="rounded-md bg-brand-200/60 px-2 py-0.5 text-xs font-semibold text-brand-800 dark:bg-brand-800/60 dark:text-brand-100">
+                    <span className="rounded-md bg-brand-200/60 px-2 py-0.5 text-xs font-semibold text-brand-800 dark:bg-brand-700 dark:text-brand-100">
                       {entry.route}
                     </span>
                   )}
@@ -263,7 +263,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
               ))}
             </div>
             {result.entries.some((e) => e.note) && (
-              <ul className="mt-3 space-y-1 text-xs text-brand-900/80 dark:text-brand-200/80">
+              <ul className="mt-3 space-y-1 text-xs text-brand-900 dark:text-brand-200">
                 {result.entries
                   .filter((e) => e.note)
                   .map((e, i) => (
@@ -272,7 +272,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
               </ul>
             )}
             {result.notes && (
-              <p className="mt-3 border-t border-brand-200/60 pt-3 text-xs text-brand-900/80 dark:border-brand-800/60 dark:text-brand-200/80">
+              <p className="mt-3 border-t border-brand-200 pt-3 text-xs text-brand-900 dark:border-brand-700 dark:text-brand-200">
                 {result.notes}
               </p>
             )}
@@ -280,7 +280,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
         )}
 
         {drug.generalNotes && (
-          <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">{drug.generalNotes}</p>
+          <p className="mt-4 text-xs text-slate-500 dark:text-slate-300">{drug.generalNotes}</p>
         )}
       </div>
     </div>

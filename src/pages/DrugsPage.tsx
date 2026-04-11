@@ -63,7 +63,7 @@ export function DrugsPage({ onNavigate }: DrugsPageProps) {
             <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
               {drug.name}
             </h2>
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-xs text-slate-500 dark:text-slate-300">
               {drug.indications.length === 1
                 ? drug.indications[0].label
                 : `${drug.indications.length} indicazioni`}

@@ -101,7 +101,7 @@ function GCSSection({ title, abbrev, items, patientType, selected, onSelect, max
               onClick={() => onSelect(item.score)}
               className={`w-full flex items-center gap-3 px-4 py-3 text-left transition ${
                 isSelected
-                  ? 'bg-brand-50 dark:bg-brand-950/40'
+                  ? 'bg-brand-50 dark:bg-brand-900/40'
                   : 'bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800/60'
               }`}
             >
@@ -201,11 +201,11 @@ export function GCSPage({ onNavigate }: GCSPageProps) {
       {hasAny && (
         <div className="mb-4 flex items-center justify-center gap-6 rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-700 dark:bg-slate-900">
           <ScorePill label="O" value={occhi} max={4} />
-          <span className="text-slate-300 dark:text-slate-600 font-light text-lg">+</span>
+          <span className="text-slate-400 dark:text-slate-500 font-light text-lg">+</span>
           <ScorePill label="V" value={verbale} max={5} />
-          <span className="text-slate-300 dark:text-slate-600 font-light text-lg">+</span>
+          <span className="text-slate-400 dark:text-slate-500 font-light text-lg">+</span>
           <ScorePill label="M" value={motoria} max={6} />
-          <span className="text-slate-300 dark:text-slate-600 font-light text-lg">=</span>
+          <span className="text-slate-400 dark:text-slate-500 font-light text-lg">=</span>
           <div className="text-center">
             <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Totale</p>
             <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 tabular-nums">
@@ -287,8 +287,8 @@ function ScorePill({ label, value, max }: { label: string; value: number | null;
   return (
     <div className="text-center">
       <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">{label}</p>
-      <p className={`text-lg font-bold tabular-nums ${value !== null ? 'text-brand-600 dark:text-brand-400' : 'text-slate-300 dark:text-slate-600'}`}>
-        {value ?? '—'}<span className="text-xs font-normal text-slate-400 dark:text-slate-500">/{max}</span>
+      <p className={`text-lg font-bold tabular-nums ${value !== null ? 'text-brand-600 dark:text-brand-400' : 'text-slate-400 dark:text-slate-500'}`}>
+        {value ?? '—'}<span className="text-xs font-normal text-slate-400 dark:text-slate-400">/{max}</span>
       </p>
     </div>
   );

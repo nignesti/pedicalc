@@ -19,6 +19,7 @@ export default {
           700: "#1e5cd8",
           800: "#1f4baf",
           900: "#1f4289",
+          950: "#0d2257",
         },
       },
       fontFamily: {
