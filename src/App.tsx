@@ -8,6 +8,7 @@ import { SummaryPage } from './pages/SummaryPage';
 import { GCSPage } from './pages/GCSPage';
 import { VenturiPage } from './pages/VenturiPage';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
+import { DisclaimerModal } from './components/DisclaimerModal';
 import { PatientProvider } from './context/PatientContext';
 
 export type View =
@@ -22,6 +23,7 @@ export type View =
 
 function App() {
   const [view, setView] = useState<View>({ name: 'home' });
+  const [showDisclaimer, setShowDisclaimer] = useState(false);
 
   return (
     <PatientProvider>
@@ -46,7 +48,20 @@ function App() {
           PediCalc · Strumento educativo e formativo · Non sostituisce il giudizio clinico del
           professionista sanitario
         </p>
+        <div className="mt-2 flex items-center justify-center gap-3">
+          <span className="font-medium text-slate-400 dark:text-slate-500">Versione Beta 1.0</span>
+          <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
+          <button
+            type="button"
+            onClick={() => setShowDisclaimer(true)}
+            className="font-medium text-brand-600 underline-offset-2 hover:underline dark:text-brand-400"
+          >
+            Disclaimer
+          </button>
+        </div>
       </footer>
+
+      {showDisclaimer && <DisclaimerModal onClose={() => setShowDisclaimer(false)} />}
     </div>
     </PatientProvider>
   );

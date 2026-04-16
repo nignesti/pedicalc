@@ -314,10 +314,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
               Peso: {weightNum} kg{ageNum && Number.isFinite(ageNum) ? ` · Età: ${ageNum} ${ageUnit}` : ''}
             </p>
             <h2 className="mt-0.5 text-xl font-bold text-brand-800 dark:text-brand-200">
-              Riepilogo paziente
+              Emergenza — Dosi pronte
             </h2>
             <p className="mt-0.5 text-sm text-brand-700/70 dark:text-brand-300/70">
-              Farmaci principali, device e parametri vitali in una schermata
+              Farmaci principali e parametri per il paziente
             </p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
