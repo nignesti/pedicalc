@@ -543,7 +543,7 @@ export const drugs: Drug[] = [
             label: 'IN',
             rule: {
               kind: 'weight-based',
-              factor: 0.4,
+              factor: 0.2,
               unit: 'mg',
               route: 'IN',
               maxDose: 10,

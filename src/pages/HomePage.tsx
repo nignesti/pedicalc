@@ -302,26 +302,44 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </button>
       </div>
 
-      {/* Riepilogo paziente — visibile solo con peso inserito */}
+      {/* Emergenza — Dosi pronte — visibile solo con peso inserito */}
       {hasWeight && !weightError && (
         <button
           type="button"
           onClick={() => onNavigate({ name: 'summary' })}
-          className="card group mt-4 flex w-full items-center justify-between gap-4 border-2 border-brand-400 bg-brand-50 text-left transition hover:-translate-y-1 hover:shadow-lg dark:border-brand-600 dark:bg-brand-900/20"
+          className="card group mt-4 flex w-full items-center justify-between gap-4 border-2 border-rose-500 bg-rose-50 text-left transition hover:-translate-y-1 hover:shadow-lg dark:border-rose-600 dark:bg-rose-950/30"
         >
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-600 dark:text-brand-400">
-              Peso: {weightNum} kg{ageNum && Number.isFinite(ageNum) ? ` · Età: ${ageNum} ${ageUnit}` : ''}
-            </p>
-            <h2 className="mt-0.5 text-xl font-bold text-brand-800 dark:text-brand-200">
-              Emergenza — Dosi pronte
-            </h2>
-            <p className="mt-0.5 text-sm text-brand-700/70 dark:text-brand-300/70">
-              Farmaci principali e parametri per il paziente
-            </p>
+          <div className="flex items-center gap-4">
+            {/* Icona croce rossa */}
+            <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-rose-600 text-white shadow-md dark:bg-rose-700">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="h-7 w-7"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-rose-600 dark:text-rose-400">
+                Peso: {weightNum} kg{ageNum && Number.isFinite(ageNum) ? ` · Età: ${ageNum} ${ageUnit}` : ''}
+              </p>
+              <h2 className="mt-0.5 text-xl font-bold text-rose-800 dark:text-rose-100">
+                Emergenza — Dosi pronte
+              </h2>
+              <p className="mt-0.5 text-sm text-rose-700/70 dark:text-rose-300/70">
+                Farmaci principali e parametri per il paziente
+              </p>
+            </div>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-            className="h-8 w-8 flex-shrink-0 text-brand-500 transition group-hover:translate-x-1" aria-hidden="true">
+            className="h-8 w-8 flex-shrink-0 text-rose-500 transition group-hover:translate-x-1" aria-hidden="true">
             <path fillRule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clipRule="evenodd" />
           </svg>
         </button>

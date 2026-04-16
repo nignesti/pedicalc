@@ -1,7 +1,8 @@
 /**
- * Schermata riassuntiva paziente.
+ * Schermata "Emergenza — Dosi pronte".
  * Mostra farmaci principali pre-calcolati, fascia device e parametri vitali
- * in un'unica schermata basata su peso (e opzionalmente età) dal PatientContext.
+ * organizzati per scenario clinico (ACR, Convulsioni, Anafilassi, ecc.)
+ * in base al peso (e opzionalmente età) dal PatientContext.
  */
 
 import { useMemo } from 'react';
@@ -17,50 +18,129 @@ interface SummaryPageProps {
   onNavigate: (view: View) => void;
 }
 
+/** Ordine di visualizzazione delle sezioni. */
+const SECTION_ORDER = [
+  'ACR',
+  'Convulsioni',
+  'Anafilassi',
+  'Bradiaritmia',
+  'Analgesia',
+  'RSI',
+  'Ipoglicemia',
+] as const;
+type SectionName = (typeof SECTION_ORDER)[number];
+
 interface SummaryEntry {
+  section: SectionName;
   label: string;
   drugId: string;
-  indicationId: string;
+  /** indicationId statico, oppure funzione che risolve in base al peso (per paracetamolo, succinilcolina). */
+  indicationId: string | ((weightKg: number) => string);
   variantId?: string;
-  section: string;
 }
 
 const SUMMARY_ENTRIES: SummaryEntry[] = [
+  // ACR
   { section: 'ACR', label: 'Adrenalina', drugId: 'adrenalina', indicationId: 'acr' },
   { section: 'ACR', label: 'Amiodarone', drugId: 'amiodarone', indicationId: 'default' },
-  { section: 'ACR', label: 'Atropina', drugId: 'atropina', indicationId: 'default' },
-  { section: 'ACR', label: 'Defib. 1ª scarica', drugId: 'elettricita', indicationId: 'defibrillazione' },
+  { section: 'ACR', label: 'Defibrillazione', drugId: 'elettricita', indicationId: 'defibrillazione' },
+
+  // Convulsioni
+  { section: 'Convulsioni', label: 'Midazolam EV', drugId: 'midazolam', indicationId: 'convulsioni', variantId: 'ev' },
   { section: 'Convulsioni', label: 'Midazolam IM', drugId: 'midazolam', indicationId: 'convulsioni', variantId: 'im' },
   { section: 'Convulsioni', label: 'Midazolam IN', drugId: 'midazolam', indicationId: 'convulsioni', variantId: 'in' },
-  { section: 'Shock / Anafilassi', label: 'Liquidi (bolo)', drugId: 'liquidi', indicationId: 'default' },
-  { section: 'Shock / Anafilassi', label: 'Adrenalina IM', drugId: 'adrenalina', indicationId: 'anafilassi' },
+
+  // Anafilassi
+  { section: 'Anafilassi', label: 'Liquidi (bolo)', drugId: 'liquidi', indicationId: 'default' },
+  { section: 'Anafilassi', label: 'Adrenalina IM', drugId: 'adrenalina', indicationId: 'anafilassi' },
+  { section: 'Anafilassi', label: 'Idrocortisone', drugId: 'idrocortisone', indicationId: 'default' },
+
+  // Bradiaritmia
+  { section: 'Bradiaritmia', label: 'Atropina', drugId: 'atropina', indicationId: 'default' },
+
+  // Analgesia
+  { section: 'Analgesia', label: 'Fentanile', drugId: 'fentanile', indicationId: 'default' },
+  { section: 'Analgesia', label: 'Ketamina', drugId: 'ketamina', indicationId: 'analgesia' },
+  { section: 'Analgesia', label: 'Morfina', drugId: 'morfina', indicationId: 'default' },
+  {
+    section: 'Analgesia',
+    label: 'Paracetamolo',
+    drugId: 'paracetamolo',
+    indicationId: (w) => (w >= 10 ? 'sopra-10kg' : 'sotto-10kg'),
+  },
+
+  // RSI (Rapid Sequence Intubation)
+  { section: 'RSI', label: 'Fentanile', drugId: 'fentanile', indicationId: 'default' },
+  { section: 'RSI', label: 'Ketamina', drugId: 'ketamina', indicationId: 'sedazione' },
+  { section: 'RSI', label: 'Midazolam', drugId: 'midazolam', indicationId: 'sedazione', variantId: 'ev-im' },
+  { section: 'RSI', label: 'Rocuronio', drugId: 'rocuronio', indicationId: 'rsi' },
+  {
+    section: 'RSI',
+    label: 'Succinilcolina',
+    drugId: 'succinilcolina',
+    indicationId: (w) => (w >= 10 ? 'sopra-10kg' : 'sotto-10kg'),
+  },
+
+  // Ipoglicemia
+  { section: 'Ipoglicemia', label: 'Glucagone', drugId: 'glucagone', indicationId: 'default' },
+  { section: 'Ipoglicemia', label: 'Glucosio 10%', drugId: 'glucosio', indicationId: 'default' },
 ];
 
-const SECTION_COLORS: Record<string, { bg: string; text: string; border: string; badge: string }> = {
-  'ACR': {
+/** Palette per sezione — colori distinti per scorrere rapidamente in emergenza. */
+const SECTION_COLORS: Record<SectionName, { bg: string; text: string; border: string; badge: string }> = {
+  ACR: {
     bg: 'bg-rose-50 dark:bg-rose-950/30',
     text: 'text-rose-900 dark:text-rose-100',
-    border: 'border-rose-200 dark:border-rose-800',
+    border: 'border-rose-300 dark:border-rose-800',
     badge: 'bg-rose-100 text-rose-800 dark:bg-rose-900/50 dark:text-rose-200',
   },
-  'Convulsioni': {
+  Convulsioni: {
     bg: 'bg-amber-50 dark:bg-amber-950/30',
     text: 'text-amber-900 dark:text-amber-100',
-    border: 'border-amber-200 dark:border-amber-800',
+    border: 'border-amber-300 dark:border-amber-800',
     badge: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200',
   },
-  'Shock / Anafilassi': {
+  Anafilassi: {
     bg: 'bg-blue-50 dark:bg-blue-950/30',
     text: 'text-blue-900 dark:text-blue-100',
-    border: 'border-blue-200 dark:border-blue-800',
+    border: 'border-blue-300 dark:border-blue-800',
     badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200',
+  },
+  Bradiaritmia: {
+    bg: 'bg-purple-50 dark:bg-purple-950/30',
+    text: 'text-purple-900 dark:text-purple-100',
+    border: 'border-purple-300 dark:border-purple-800',
+    badge: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-200',
+  },
+  Analgesia: {
+    bg: 'bg-emerald-50 dark:bg-emerald-950/30',
+    text: 'text-emerald-900 dark:text-emerald-100',
+    border: 'border-emerald-300 dark:border-emerald-800',
+    badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-200',
+  },
+  RSI: {
+    bg: 'bg-slate-50 dark:bg-slate-800/50',
+    text: 'text-slate-900 dark:text-slate-100',
+    border: 'border-slate-300 dark:border-slate-700',
+    badge: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-100',
+  },
+  Ipoglicemia: {
+    bg: 'bg-orange-50 dark:bg-orange-950/30',
+    text: 'text-orange-900 dark:text-orange-100',
+    border: 'border-orange-300 dark:border-orange-800',
+    badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-200',
   },
 };
 
-function getRule(entry: SummaryEntry): DosageRule | null {
+function resolveIndicationId(entry: SummaryEntry, weightKg: number): string {
+  return typeof entry.indicationId === 'function' ? entry.indicationId(weightKg) : entry.indicationId;
+}
+
+function getRule(entry: SummaryEntry, weightKg: number): DosageRule | null {
   const drug = getDrugById(entry.drugId);
   if (!drug) return null;
-  const indication = drug.indications.find((i) => i.id === entry.indicationId);
+  const indicationId = resolveIndicationId(entry, weightKg);
+  const indication = drug.indications.find((i) => i.id === indicationId);
   if (!indication) return null;
   if (entry.variantId && indication.routeVariants) {
     const variant = indication.routeVariants.find((v) => v.id === entry.variantId);
@@ -84,7 +164,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
   const drugResults = useMemo(() => {
     if (!hasWeight) return [];
     return SUMMARY_ENTRIES.map((entry) => {
-      const rule = getRule(entry);
+      const rule = getRule(entry, weightNum);
       if (!rule) return { entry, value: '—', unit: '', route: '', capped: false };
       try {
         const result = calculate(rule, { weightKg: weightNum, ageYears });
@@ -121,21 +201,21 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
     } catch (e) { if (e instanceof VitalSignsError) return null; return null; }
   }, [ageYears, ageNum, ageUnit]);
 
-  // Raggruppa per sezione
+  // Raggruppa per sezione rispettando SECTION_ORDER
   const sections = useMemo(() => {
-    const map = new Map<string, typeof drugResults>();
+    const map = new Map<SectionName, typeof drugResults>();
     for (const r of drugResults) {
       const sec = r.entry.section;
       if (!map.has(sec)) map.set(sec, []);
       map.get(sec)!.push(r);
     }
-    return Array.from(map.entries());
+    return SECTION_ORDER.filter((s) => map.has(s)).map((s) => [s, map.get(s)!] as const);
   }, [drugResults]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={() => onNavigate({ name: 'home' })}
@@ -148,7 +228,14 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           </svg>
           Home
         </button>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Riepilogo</h1>
+        <div className="flex items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-600 text-white dark:bg-rose-700">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5" aria-hidden="true">
+              <path fillRule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clipRule="evenodd" />
+            </svg>
+          </div>
+          <h1 className="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">Emergenza</h1>
+        </div>
         <div className="w-16" />
       </div>
 
@@ -171,7 +258,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           <div className="card flex flex-wrap items-center gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-300">Peso</p>
-              <p className="text-3xl font-bold text-brand-600 dark:text-brand-400">{weightNum} kg</p>
+              <p className="text-3xl font-bold text-rose-600 dark:text-rose-400">{weightNum} kg</p>
             </div>
             {ageNum !== undefined && Number.isFinite(ageNum) && (
               <div>
@@ -228,7 +315,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
 
           {/* Sezioni farmaci */}
           {sections.map(([sectionName, items]) => {
-            const s = SECTION_COLORS[sectionName] ?? SECTION_COLORS['ACR'];
+            const s = SECTION_COLORS[sectionName];
             return (
               <div key={sectionName} className={`rounded-2xl border-2 p-4 ${s.border} ${s.bg}`}>
                 <h2 className={`mb-3 text-sm font-bold uppercase tracking-wide ${s.text}`}>
@@ -236,8 +323,10 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                 </h2>
                 <div className="space-y-2">
                   {items.map(({ entry, value, unit, route, capped }) => (
-                    <div key={`${entry.drugId}-${entry.indicationId}-${entry.variantId ?? ''}`}
-                      className="flex items-center justify-between gap-2">
+                    <div
+                      key={`${entry.drugId}-${entry.section}-${entry.label}`}
+                      className="flex items-center justify-between gap-2"
+                    >
                       <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
                       <span className="flex items-center gap-1.5">
                         {capped && (
