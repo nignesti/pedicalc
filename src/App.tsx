@@ -7,6 +7,9 @@ import { DevicesPage } from './pages/DevicesPage';
 import { SummaryPage } from './pages/SummaryPage';
 import { GCSPage } from './pages/GCSPage';
 import { VenturiPage } from './pages/VenturiPage';
+import { ETTPage } from './pages/ETTPage';
+import { AntidotesPage } from './pages/AntidotesPage';
+import { APGARPage } from './pages/APGARPage';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
 import { DisclaimerModal } from './components/DisclaimerModal';
 import { PatientProvider } from './context/PatientContext';
@@ -18,8 +21,11 @@ export type View =
   | { name: 'drug-detail'; drugId: string }
   | { name: 'vital-signs' }
   | { name: 'gcs' }
+  | { name: 'apgar' }
   | { name: 'devices' }
-  | { name: 'venturi' };
+  | { name: 'venturi' }
+  | { name: 'ett' }
+  | { name: 'antidotes' };
 
 function App() {
   const [view, setView] = useState<View>({ name: 'home' });
@@ -39,8 +45,11 @@ function App() {
         )}
         {view.name === 'vital-signs' && <VitalSignsPage onNavigate={setView} />}
         {view.name === 'gcs' && <GCSPage onNavigate={setView} />}
+        {view.name === 'apgar' && <APGARPage onNavigate={setView} />}
         {view.name === 'devices' && <DevicesPage onNavigate={setView} />}
         {view.name === 'venturi' && <VenturiPage onNavigate={setView} />}
+        {view.name === 'ett' && <ETTPage onNavigate={setView} />}
+        {view.name === 'antidotes' && <AntidotesPage onNavigate={setView} />}
       </main>
 
       <footer className="border-t border-slate-200 bg-white pt-4 pb-safe-or-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">

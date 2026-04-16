@@ -154,6 +154,28 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
             <span className="text-2xl text-violet-500 dark:text-violet-400 transition group-hover:translate-x-1">→</span>
           </button>
         </div>
+
+        {/* Pulsante APGAR */}
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => onNavigate({ name: 'apgar' })}
+            className="group flex w-full items-center justify-between rounded-2xl border-2 border-pink-200 bg-pink-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-pink-700 dark:bg-pink-950/30"
+          >
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-pink-500 dark:text-pink-400">
+                Strumento
+              </p>
+              <p className="text-base font-bold text-pink-900 dark:text-pink-100">
+                Indice di APGAR
+              </p>
+              <p className="text-xs text-pink-700/70 dark:text-pink-300/70">
+                Valutazione del neonato a 1' e 5' dalla nascita
+              </p>
+            </div>
+            <span className="text-2xl text-pink-500 dark:text-pink-400 transition group-hover:translate-x-1">→</span>
+          </button>
+        </div>
       </div>
     </div>
   );

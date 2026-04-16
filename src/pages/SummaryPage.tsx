@@ -354,6 +354,8 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           <div className="flex flex-wrap justify-center gap-3 pt-2">
             <button type="button" onClick={() => onNavigate({ name: 'drugs' })}
               className="btn-ghost text-sm">Tutti i farmaci →</button>
+            <button type="button" onClick={() => onNavigate({ name: 'vital-signs' })}
+              className="btn-ghost text-sm">Parametri vitali →</button>
             <button type="button" onClick={() => onNavigate({ name: 'devices' })}
               className="btn-ghost text-sm">Device →</button>
           </div>

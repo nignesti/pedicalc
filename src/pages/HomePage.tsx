@@ -344,6 +344,43 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </svg>
         </button>
       )}
+
+      {/* Antidoti — sempre visibile (ultimo pulsante) */}
+      <button
+        type="button"
+        onClick={() => onNavigate({ name: 'antidotes' })}
+        className="group mt-4 flex w-full items-center justify-between gap-4 rounded-2xl border-2 border-purple-200 bg-purple-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-purple-700 dark:bg-purple-950/30"
+      >
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-purple-600 text-white shadow-sm dark:bg-purple-700">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className="h-7 w-7"
+              aria-hidden="true"
+            >
+              <path d="M11.644 1.59a.75.75 0 0 1 .712 0l9.75 5.25a.75.75 0 0 1 0 1.32l-9.75 5.25a.75.75 0 0 1-.712 0l-9.75-5.25a.75.75 0 0 1 0-1.32l9.75-5.25Z" />
+              <path d="M3.265 10.602 11.644 15.1a.75.75 0 0 0 .712 0l8.379-4.498c.454.445.454 1.17 0 1.615l-8.379 4.498a2.25 2.25 0 0 1-2.134 0l-8.379-4.498a1.15 1.15 0 0 1 0-1.615Z" />
+              <path d="M3.265 15.352 11.644 19.85a.75.75 0 0 0 .712 0l8.379-4.498c.454.445.454 1.17 0 1.615l-8.379 4.498a2.25 2.25 0 0 1-2.134 0l-8.379-4.498a1.15 1.15 0 0 1 0-1.615Z" />
+            </svg>
+          </div>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-purple-600 dark:text-purple-400">
+              Tossicologia
+            </p>
+            <h2 className="mt-0.5 text-lg font-bold text-purple-900 dark:text-purple-100">
+              Antidoti
+            </h2>
+            <p className="mt-0.5 text-xs text-purple-700/70 dark:text-purple-300/70">
+              Intossicazioni comuni e antidoti corrispondenti
+            </p>
+          </div>
+        </div>
+        <span className="text-2xl text-purple-500 dark:text-purple-400 transition group-hover:translate-x-1">
+          →
+        </span>
+      </button>
     </div>
   );
 }

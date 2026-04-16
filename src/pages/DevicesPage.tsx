@@ -261,6 +261,26 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
         <span className="text-2xl text-cyan-300 dark:text-cyan-600 transition group-hover:translate-x-1">→</span>
       </button>
 
+      {/* Pulsante Calcolatore Tubo Endotracheale */}
+      <button
+        type="button"
+        onClick={() => onNavigate({ name: 'ett' })}
+        className="group mt-3 flex w-full items-center justify-between rounded-2xl border-2 border-teal-200 bg-teal-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-teal-700 dark:bg-teal-950/30"
+      >
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wide text-teal-500 dark:text-teal-400">
+            Strumento
+          </p>
+          <p className="text-base font-bold text-teal-900 dark:text-teal-100">
+            Calcolatore tubo endotracheale
+          </p>
+          <p className="text-xs text-teal-700/70 dark:text-teal-300/70">
+            Diametro, profondità, aspiratore e lama suggerita
+          </p>
+        </div>
+        <span className="text-2xl text-teal-300 dark:text-teal-600 transition group-hover:translate-x-1">→</span>
+      </button>
+
       {/* Link a Elettricità */}
       <div className="mt-4 text-center">
         <button
