@@ -58,7 +58,7 @@ function App() {
           professionista sanitario
         </p>
         <div className="mt-2 flex items-center justify-center gap-3">
-          <span className="font-medium text-slate-400 dark:text-slate-500">Versione Beta 1.0</span>
+          <span className="font-medium text-slate-400 dark:text-slate-500">Versione Beta 1.1</span>
           <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
           <button
             type="button"

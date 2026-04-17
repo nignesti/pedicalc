@@ -48,6 +48,18 @@ const ANTIDOTES: Antidote[] = [
     colorText: 'text-lime-900 dark:text-lime-100',
     colorBadge: 'bg-lime-100 text-lime-800 dark:bg-lime-900/50 dark:text-lime-200',
   },
+  {
+    id: 'beta-bloccanti',
+    label: 'Beta-Bloccanti',
+    description:
+      'Intossicazione da beta-bloccanti con scarsa o nulla risposta all\'atropina.',
+    drugId: 'glucagone',
+    drugName: 'Glucagone',
+    colorBg: 'bg-orange-50 dark:bg-orange-950/30',
+    colorBorder: 'border-orange-300 dark:border-orange-700',
+    colorText: 'text-orange-900 dark:text-orange-100',
+    colorBadge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-200',
+  },
 ];
 
 export function AntidotesPage({ onNavigate }: AntidotesPageProps) {
