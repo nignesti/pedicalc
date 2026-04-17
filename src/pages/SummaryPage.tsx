@@ -5,7 +5,7 @@
  * in base al peso (e opzionalmente età) dal PatientContext.
  */
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
 import { getDrugById } from '../data/drugs';
@@ -13,6 +13,7 @@ import { calculate, CalculationError } from '../lib/calculator';
 import type { DosageRule } from '../types/drug';
 import { findBand, DeviceSelectorError } from '../lib/deviceSelector';
 import { calculateVitalSigns, VitalSignsError } from '../lib/vitalSigns';
+import { ACRTimerModal } from '../components/ACRTimerModal';
 
 interface SummaryPageProps {
   onNavigate: (view: View) => void;
@@ -201,6 +202,8 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
     } catch (e) { if (e instanceof VitalSignsError) return null; return null; }
   }, [ageYears, ageNum, ageUnit]);
 
+  const [timerOpen, setTimerOpen] = useState(false);
+
   // Raggruppa per sezione rispettando SECTION_ORDER
   const sections = useMemo(() => {
     const map = new Map<SectionName, typeof drugResults>();
@@ -318,9 +321,23 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
             const s = SECTION_COLORS[sectionName];
             return (
               <div key={sectionName} className={`rounded-2xl border-2 p-4 ${s.border} ${s.bg}`}>
-                <h2 className={`mb-3 text-sm font-bold uppercase tracking-wide ${s.text}`}>
-                  {sectionName}
-                </h2>
+                <div className="mb-3 flex items-center justify-between gap-2">
+                  <h2 className={`text-sm font-bold uppercase tracking-wide ${s.text}`}>
+                    {sectionName}
+                  </h2>
+                  {sectionName === 'ACR' && (
+                    <button
+                      type="button"
+                      onClick={() => setTimerOpen(true)}
+                      className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-rose-500 active:bg-rose-700"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+                        <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                      </svg>
+                      Timer ACR
+                    </button>
+                  )}
+                </div>
                 <div className="space-y-2">
                   {items.map(({ entry, value, unit, route, capped }) => (
                     <div
@@ -349,6 +366,10 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
               </div>
             );
           })}
+
+          {timerOpen && (
+            <ACRTimerModal onClose={() => setTimerOpen(false)} weightKg={weightNum} />
+          )}
 
           {/* Link dettaglio */}
           <div className="flex flex-wrap justify-center gap-3 pt-2">

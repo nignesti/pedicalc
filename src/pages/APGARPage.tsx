@@ -239,6 +239,31 @@ export function APGARPage({ onNavigate }: APGARPageProps) {
           Valutazione a 1' e 5' dalla nascita. Ripetere a 10' se punteggio &lt; 7 al 5'.
         </p>
       </div>
+
+      {/* Punteggio riepilogativo in fondo */}
+      <div
+        className={`mt-4 rounded-2xl border-2 px-5 py-4 transition ${interp.border} ${interp.bg}`}
+      >
+        <div className="flex items-baseline justify-between gap-4">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+              Punteggio totale
+            </p>
+            <p className={`text-4xl font-bold tabular-nums ${interp.color}`}>
+              {total} <span className="text-xl opacity-60">/10</span>
+            </p>
+          </div>
+          {allFilled ? (
+            <div className="text-right">
+              <p className={`text-sm font-bold ${interp.color}`}>{interp.label}</p>
+            </div>
+          ) : (
+            <p className="text-right text-xs text-slate-500 dark:text-slate-400">
+              Completa tutti i parametri
+            </p>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
