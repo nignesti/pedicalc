@@ -15,6 +15,7 @@
 import { useMemo } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
+import { PatientChip } from '../components/PatientChip';
 
 interface ETTPageProps {
   onNavigate: (view: View) => void;
@@ -117,7 +118,7 @@ export function ETTPage({ onNavigate }: ETTPageProps) {
           <span aria-hidden="true">←</span> Device
         </button>
         <h1 className="text-xl font-bold text-slate-900 dark:text-slate-100">Tubo endotracheale</h1>
-        <div className="w-20" />
+        <PatientChip />
       </div>
 
       {/* Input età */}
@@ -144,7 +145,6 @@ export function ETTPage({ onNavigate }: ETTPageProps) {
               onChange={(e) => setAge(e.target.value)}
               className="input-field"
               placeholder={ageUnit === 'anni' ? 'Es. 4' : 'Es. 6'}
-              autoFocus
             />
           </div>
           <div>

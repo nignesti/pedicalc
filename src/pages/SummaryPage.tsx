@@ -303,7 +303,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                 <button
                   type="button"
                   onClick={() => onNavigate({ name: 'vital-signs' })}
-                  className="text-xs text-slate-400 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition"
+                  className="rounded-lg px-2 py-1.5 text-xs text-slate-400 hover:text-brand-600 dark:text-slate-300 dark:hover:text-brand-400 transition"
                 >
                   dettaglio →
                 </button>

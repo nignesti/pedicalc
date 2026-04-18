@@ -45,18 +45,9 @@ export function HomePage({ onNavigate }: HomePageProps) {
       : null;
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-10">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
-          PediCalc
-        </h1>
-        <p className="mt-3 text-lg text-slate-600 dark:text-slate-400">
-          Supporto al calcolo in emergenza pediatrica
-        </p>
-      </div>
-
+    <div className="mx-auto max-w-4xl px-4 py-6">
       {/* Profilo paziente */}
-      <div className="card mb-8">
+      <div className="card mb-6">
         <div className="flex items-center justify-between">
           <h2 className="text-base font-semibold text-slate-800 dark:text-slate-200">
             Paziente
@@ -154,7 +145,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <button
             type="button"
             onClick={() => setShowEstimate((v) => !v)}
-            className="text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition"
+            className="rounded-lg px-2 py-1.5 text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition"
           >
             {showEstimate ? '▲ Nascondi stima' : '▼ Non conosci il peso? Stimalo dall\'età'}
           </button>

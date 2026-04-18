@@ -3,6 +3,7 @@ import type { View } from '../App';
 import { calculateVitalSigns, VitalSignsError } from '../lib/vitalSigns';
 import type { VitalSignsResult } from '../lib/vitalSigns';
 import { usePatient } from '../context/PatientContext';
+import { PatientChip } from '../components/PatientChip';
 
 interface VitalSignsPageProps {
   onNavigate: (view: View) => void;
@@ -47,7 +48,7 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
           Home
         </button>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Parametri vitali</h1>
-        <div className="w-16" />
+        <PatientChip />
       </div>
 
       <div className="card">
@@ -71,7 +72,6 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
               onChange={(e) => setValue(e.target.value)}
               className="input-field"
               placeholder="Es. 4"
-              autoFocus
             />
           </div>
           <div>

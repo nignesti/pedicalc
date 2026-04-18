@@ -3,6 +3,7 @@ import type { View } from '../App';
 import { findBand, DeviceSelectorError } from '../lib/deviceSelector';
 import type { DeviceBand, FasciaColor } from '../data/devices';
 import { usePatient } from '../context/PatientContext';
+import { PatientChip } from '../components/PatientChip';
 
 interface DevicesPageProps {
   onNavigate: (view: View) => void;
@@ -95,7 +96,7 @@ export function DevicesPage({ onNavigate }: DevicesPageProps) {
           Home
         </button>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Device</h1>
-        <div className="w-16" />
+        <PatientChip />
       </div>
 
       <div className="card">
