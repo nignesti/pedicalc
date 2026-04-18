@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ThemeToggle } from './ThemeToggle';
+import type { View } from '../App';
 
 const STORAGE_KEY = 'pedicalc-disclaimer-ack';
 const SHIFT_MS = 8 * 60 * 60 * 1000; // 8 ore
@@ -21,7 +22,11 @@ function saveAcknowledgment() {
   } catch { /* noop */ }
 }
 
-export function DisclaimerBanner() {
+interface DisclaimerBannerProps {
+  onNavigate?: (view: View) => void;
+}
+
+export function DisclaimerBanner({ onNavigate }: DisclaimerBannerProps) {
   const [acknowledged, setAcknowledged] = useState(isAcknowledgedRecently);
   const [checked, setChecked] = useState(false);
 
@@ -36,7 +41,14 @@ export function DisclaimerBanner() {
       <header className="border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-2">
           <div className="flex items-center gap-2">
-            <img src="/pwa-192x192.png" alt="PediCalc" className="h-8 w-8 rounded-lg" />
+            <button
+              type="button"
+              onClick={() => onNavigate?.({ name: 'about' })}
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-lg"
+              aria-label="Chi sono"
+            >
+              <img src="/pwa-192x192.png" alt="PediCalc" className="h-8 w-8 rounded-lg" />
+            </button>
             <div className="flex items-center rounded-lg bg-brand-600 px-2 py-0.5">
               <span className="text-sm font-bold text-white">Pedi</span>
               <span className="text-sm font-bold text-brand-200">Calc</span>

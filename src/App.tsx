@@ -10,6 +10,7 @@ import { VenturiPage } from './pages/VenturiPage';
 import { ETTPage } from './pages/ETTPage';
 import { AntidotesPage } from './pages/AntidotesPage';
 import { APGARPage } from './pages/APGARPage';
+import { AboutPage } from './pages/AboutPage';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
 import { DisclaimerModal } from './components/DisclaimerModal';
 import { PatientProvider } from './context/PatientContext';
@@ -25,7 +26,8 @@ export type View =
   | { name: 'devices' }
   | { name: 'venturi' }
   | { name: 'ett' }
-  | { name: 'antidotes' };
+  | { name: 'antidotes' }
+  | { name: 'about' };
 
 function App() {
   const [view, setView] = useState<View>({ name: 'home' });
@@ -34,7 +36,7 @@ function App() {
   return (
     <PatientProvider>
     <div className="flex min-h-dvh flex-col bg-slate-50 pt-safe dark:bg-slate-950">
-      <DisclaimerBanner />
+      <DisclaimerBanner onNavigate={setView} />
 
       <main className="flex-1">
         {view.name === 'home' && <HomePage onNavigate={setView} />}
@@ -50,6 +52,7 @@ function App() {
         {view.name === 'venturi' && <VenturiPage onNavigate={setView} />}
         {view.name === 'ett' && <ETTPage onNavigate={setView} />}
         {view.name === 'antidotes' && <AntidotesPage onNavigate={setView} />}
+        {view.name === 'about' && <AboutPage onNavigate={setView} />}
       </main>
 
       <footer className="border-t border-slate-200 bg-white pt-4 pb-safe-or-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
