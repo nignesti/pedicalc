@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { getDrugById } from '../data/drugs';
+import { PatientChip } from '../components/PatientChip';
 import { calculate, CalculationError } from '../lib/calculator';
 import type { CalculationResult } from '../lib/calculator';
 import type { DosageRule, Indication } from '../types/drug';
@@ -90,7 +91,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex items-center justify-between gap-2">
         <button
           type="button"
           onClick={() => onNavigate({ name: 'drugs' })}
@@ -98,6 +99,7 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
         >
           ← Farmaci
         </button>
+        <PatientChip />
         <button
           type="button"
           onClick={() => onNavigate({ name: 'home' })}

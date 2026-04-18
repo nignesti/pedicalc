@@ -148,7 +148,7 @@ export function APGARPage({ onNavigate }: APGARPageProps) {
         <button
           type="button"
           onClick={reset}
-          className="text-xs font-medium text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition"
+          className="rounded-lg px-3 py-2 text-xs font-medium text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition"
         >
           Reset ×
         </button>

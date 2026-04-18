@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { drugs } from '../data/drugs';
+import { PatientChip } from '../components/PatientChip';
 
 interface DrugsPageProps {
   onNavigate: (view: View) => void;
@@ -38,7 +39,7 @@ export function DrugsPage({ onNavigate }: DrugsPageProps) {
           Home
         </button>
         <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Farmaci</h1>
-        <div className="w-16" />
+        <PatientChip />
       </div>
 
       <div className="mb-5">

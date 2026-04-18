@@ -65,7 +65,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <button
               type="button"
               onClick={reset}
-              className="text-xs font-medium text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition"
+              className="rounded-lg px-3 py-2 text-xs font-medium text-slate-400 hover:text-rose-500 dark:text-slate-500 dark:hover:text-rose-400 transition"
             >
               Nuovo paziente ×
             </button>
@@ -91,7 +91,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
               onChange={(e) => setWeight(e.target.value)}
               className="input-field"
               placeholder="Es. 15"
-              autoFocus
             />
             {weightError && (
               <p className="mt-1 text-xs font-medium text-rose-600 dark:text-rose-400">{weightError}</p>
@@ -222,83 +221,61 @@ export function HomePage({ onNavigate }: HomePageProps) {
       </div>
 
       {/* Sezioni */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <button
           type="button"
           onClick={() => onNavigate({ name: 'drugs' })}
-          className="card group flex flex-col items-start text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-brand-100 text-brand-700 transition group-hover:bg-brand-200 dark:bg-brand-900/40 dark:text-brand-300 dark:group-hover:bg-brand-900/60">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-6 w-6"
-              aria-hidden="true"
-            >
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-700 transition group-hover:bg-brand-200 sm:mb-4 dark:bg-brand-900/40 dark:text-brand-300 dark:group-hover:bg-brand-900/60">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
               <path d="M11.644 1.59a.75.75 0 0 1 .712 0l9.75 5.25a.75.75 0 0 1 0 1.32l-9.75 5.25a.75.75 0 0 1-.712 0l-9.75-5.25a.75.75 0 0 1 0-1.32l9.75-5.25Z" />
               <path d="m3.265 10.602 7.668 4.129a2.25 2.25 0 0 0 2.134 0l7.668-4.13 1.37.739a.75.75 0 0 1 0 1.32l-9.75 5.25a.75.75 0 0 1-.71 0l-9.75-5.25a.75.75 0 0 1 0-1.32l1.37-.738Z" />
               <path d="m10.933 19.231-7.668-4.13-1.37.739a.75.75 0 0 0 0 1.32l9.75 5.25c.221.12.489.12.71 0l9.75-5.25a.75.75 0 0 0 0-1.32l-1.37-.738-7.668 4.13a2.25 2.25 0 0 1-2.134-.001Z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Farmaci</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Calcola i dosaggi pediatrici in base al peso del paziente
-          </p>
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-slate-900 sm:text-xl dark:text-slate-100">Farmaci</h2>
+            <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
+              Calcola i dosaggi pediatrici in base al peso del paziente
+            </p>
+          </div>
         </button>
 
         <button
           type="button"
           onClick={() => onNavigate({ name: 'vital-signs' })}
-          className="card group flex flex-col items-start text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-rose-100 text-rose-700 transition group-hover:bg-rose-200 dark:bg-rose-900/40 dark:text-rose-300 dark:group-hover:bg-rose-900/60">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-6 w-6"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 0 1-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 0 1 .947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 0 1 2.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 0 1 2.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 0 1 .947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 0 1-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 0 1-2.287-.947ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"
-                clipRule="evenodd"
-              />
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700 transition group-hover:bg-rose-200 sm:mb-4 dark:bg-rose-900/40 dark:text-rose-300 dark:group-hover:bg-rose-900/60">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
+              <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 0 1-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 0 1 .947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 0 1 2.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 0 1 2.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 0 1 .947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 0 1-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 0 1-2.287-.947ZM10 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clipRule="evenodd" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">
-            Parametri vitali
-          </h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Range di riferimento FR, FC e PA in base all'età
-          </p>
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-slate-900 sm:text-xl dark:text-slate-100">Parametri vitali</h2>
+            <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
+              Range di riferimento FR, FC e PA in base all'età
+            </p>
+          </div>
         </button>
 
         <button
           type="button"
           onClick={() => onNavigate({ name: 'devices' })}
-          className="card group flex flex-col items-start text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 transition group-hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300 dark:group-hover:bg-emerald-900/60">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="h-6 w-6"
-              aria-hidden="true"
-            >
-              <path
-                fillRule="evenodd"
-                d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z"
-                clipRule="evenodd"
-              />
+          <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 transition group-hover:bg-emerald-200 sm:mb-4 dark:bg-emerald-900/40 dark:text-emerald-300 dark:group-hover:bg-emerald-900/60">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
+              <path fillRule="evenodd" d="M14.615 1.595a.75.75 0 0 1 .359.852L12.982 9.75h7.268a.75.75 0 0 1 .548 1.262l-10.5 11.25a.75.75 0 0 1-1.272-.71l1.992-7.302H3.75a.75.75 0 0 1-.548-1.262l10.5-11.25a.75.75 0 0 1 .913-.143Z" clipRule="evenodd" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-100">Device</h2>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-            Dispositivi per fascia pediatrica in base a età, peso o altezza
-          </p>
+          <div className="min-w-0">
+            <h2 className="text-lg font-semibold text-slate-900 sm:text-xl dark:text-slate-100">Device</h2>
+            <p className="mt-0.5 text-sm text-slate-600 dark:text-slate-400">
+              Dispositivi per fascia pediatrica in base a età, peso o altezza
+            </p>
+          </div>
         </button>
       </div>
 
