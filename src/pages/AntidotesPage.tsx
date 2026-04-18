@@ -103,7 +103,7 @@ export function AntidotesPage({ onNavigate }: AntidotesPageProps) {
             key={a.id}
             type="button"
             onClick={() => onNavigate({ name: 'drug-detail', drugId: a.drugId })}
-            className={`group flex w-full items-center justify-between gap-4 rounded-2xl border-2 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md ${a.colorBg} ${a.colorBorder}`}
+            className={`group flex w-full items-center justify-between gap-4 rounded-2xl border-2 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] ${a.colorBg} ${a.colorBorder}`}
           >
             <div className="flex-1">
               <div className="flex items-center gap-2">

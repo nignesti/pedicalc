@@ -225,7 +225,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <button
           type="button"
           onClick={() => onNavigate({ name: 'drugs' })}
-          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg active:scale-[0.97] sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
           <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-700 transition group-hover:bg-brand-200 sm:mb-4 dark:bg-brand-900/40 dark:text-brand-300 dark:group-hover:bg-brand-900/60">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
@@ -245,7 +245,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <button
           type="button"
           onClick={() => onNavigate({ name: 'vital-signs' })}
-          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg active:scale-[0.97] sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
           <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-rose-100 text-rose-700 transition group-hover:bg-rose-200 sm:mb-4 dark:bg-rose-900/40 dark:text-rose-300 dark:group-hover:bg-rose-900/60">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
@@ -263,7 +263,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <button
           type="button"
           onClick={() => onNavigate({ name: 'devices' })}
-          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
+          className="card group flex flex-row items-center gap-4 p-4 text-left transition hover:-translate-y-1 hover:border-brand-400 hover:shadow-lg active:scale-[0.97] sm:flex-col sm:items-start sm:p-6 dark:hover:border-brand-500"
         >
           <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700 transition group-hover:bg-emerald-200 sm:mb-4 dark:bg-emerald-900/40 dark:text-emerald-300 dark:group-hover:bg-emerald-900/60">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-6 w-6" aria-hidden="true">
@@ -284,7 +284,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <button
           type="button"
           onClick={() => onNavigate({ name: 'summary' })}
-          className="card group mt-4 flex w-full items-center justify-between gap-4 border-2 border-rose-500 bg-rose-50 text-left transition hover:-translate-y-1 hover:shadow-lg dark:border-rose-600 dark:bg-rose-950/30"
+          className="card group mt-4 flex w-full items-center justify-between gap-4 border-2 border-rose-500 bg-rose-50 text-left transition hover:-translate-y-1 hover:shadow-lg active:scale-[0.98] dark:border-rose-600 dark:bg-rose-950/30"
         >
           <div className="flex items-center gap-4">
             {/* Icona croce rossa */}
@@ -326,7 +326,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <button
         type="button"
         onClick={() => onNavigate({ name: 'antidotes' })}
-        className="group mt-4 flex w-full items-center justify-between gap-4 rounded-2xl border-2 border-purple-200 bg-purple-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-purple-700 dark:bg-purple-950/30"
+        className="group mt-4 flex w-full items-center justify-between gap-4 rounded-2xl border-2 border-purple-200 bg-purple-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md active:scale-[0.98] dark:border-purple-700 dark:bg-purple-950/30"
       >
         <div className="flex items-center gap-4">
           <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-purple-600 text-white shadow-sm dark:bg-purple-700">
