@@ -204,6 +204,19 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
 
   const [timerOpen, setTimerOpen] = useState(false);
 
+  // Accordion: tutte le sezioni aperte di default
+  const [openSections, setOpenSections] = useState<Set<SectionName>>(
+    () => new Set(SECTION_ORDER)
+  );
+  function toggleSection(name: SectionName) {
+    setOpenSections((prev) => {
+      const next = new Set(prev);
+      if (next.has(name)) next.delete(name);
+      else next.add(name);
+      return next;
+    });
+  }
+
   // Raggruppa per sezione rispettando SECTION_ORDER
   const sections = useMemo(() => {
     const map = new Map<SectionName, typeof drugResults>();
@@ -316,53 +329,82 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
             </div>
           )}
 
-          {/* Sezioni farmaci */}
+          {/* Sezioni farmaci — accordion */}
           {sections.map(([sectionName, items]) => {
             const s = SECTION_COLORS[sectionName];
+            const isOpen = openSections.has(sectionName);
             return (
-              <div key={sectionName} className={`rounded-2xl border-2 p-4 ${s.border} ${s.bg}`}>
-                <div className="mb-3 flex items-center justify-between gap-2">
-                  <h2 className={`text-sm font-bold uppercase tracking-wide ${s.text}`}>
-                    {sectionName}
-                  </h2>
-                  {sectionName === 'ACR' && (
-                    <button
-                      type="button"
-                      onClick={() => setTimerOpen(true)}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-rose-500 active:bg-rose-700"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
-                        <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
-                      </svg>
-                      Timer ACR
-                    </button>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  {items.map(({ entry, value, unit, route, capped }) => (
-                    <div
-                      key={`${entry.drugId}-${entry.section}-${entry.label}`}
-                      className="flex items-center justify-between gap-2"
-                    >
-                      <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
-                      <span className="flex items-center gap-1.5">
-                        {capped && (
-                          <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                            MAX
-                          </span>
-                        )}
-                        <span className={`text-base font-bold ${s.text}`}>
-                          {value} {unit}
-                        </span>
-                        {route && (
-                          <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
-                            {route}
-                          </span>
-                        )}
+              <div key={sectionName} className={`overflow-hidden rounded-2xl border-2 ${s.border} ${s.bg}`}>
+                {/* Header accordion — toccabile */}
+                <button
+                  type="button"
+                  onClick={() => toggleSection(sectionName)}
+                  className="flex w-full items-center justify-between gap-2 px-4 py-3 text-left"
+                >
+                  <div className="flex items-center gap-2">
+                    <h2 className={`text-sm font-bold uppercase tracking-wide ${s.text}`}>
+                      {sectionName}
+                    </h2>
+                    {sectionName === 'ACR' && (
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); setTimerOpen(true); }}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-rose-600 px-3 py-1 text-xs font-bold text-white shadow-sm transition hover:bg-rose-500 active:bg-rose-700"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+                          <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+                        </svg>
+                        Timer ACR
+                      </button>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!isOpen && (
+                      <span className={`text-xs opacity-60 ${s.text}`}>
+                        {items.length} {items.length === 1 ? 'farmaco' : 'farmaci'}
                       </span>
-                    </div>
-                  ))}
-                </div>
+                    )}
+                    {/* Chevron animato */}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className={`h-4 w-4 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''} ${s.text} opacity-60`}
+                      aria-hidden="true"
+                    >
+                      <path fillRule="evenodd" d="M12.53 16.28a.75.75 0 0 1-1.06 0l-7.5-7.5a.75.75 0 0 1 1.06-1.06L12 14.69l6.97-6.97a.75.75 0 1 1 1.06 1.06l-7.5 7.5Z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                </button>
+
+                {/* Contenuto collassabile */}
+                {isOpen && (
+                  <div className="space-y-2 px-4 pb-4">
+                    {items.map(({ entry, value, unit, route, capped }) => (
+                      <div
+                        key={`${entry.drugId}-${entry.section}-${entry.label}`}
+                        className="flex items-center justify-between gap-2"
+                      >
+                        <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
+                        <span className="flex items-center gap-1.5">
+                          {capped && (
+                            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                              MAX
+                            </span>
+                          )}
+                          <span className={`text-base font-bold ${s.text}`}>
+                            {value} {unit}
+                          </span>
+                          {route && (
+                            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
+                              {route}
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             );
           })}
