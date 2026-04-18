@@ -109,7 +109,7 @@ export function AntidotesPage({ onNavigate }: AntidotesPageProps) {
               <div className="flex items-center gap-2">
                 <h2 className={`text-lg font-bold ${a.colorText}`}>{a.label}</h2>
                 <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${a.colorBadge}`}
+                  className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase tracking-wide ${a.colorBadge}`}
                 >
                   {a.drugName}
                 </span>
