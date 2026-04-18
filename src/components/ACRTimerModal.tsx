@@ -115,6 +115,25 @@ function buildSummary(
   return lines.join('\n');
 }
 
+// ─── dosi ACR da peso ────────────────────────────────────────────────────────
+
+function fmtMg(mg: number): string {
+  // Mostra fino a 2 decimali, rimuove zeri finali inutili
+  const s = mg.toFixed(2);
+  return parseFloat(s) + ' mg';
+}
+
+function calcACRDoses(kg: number): { adrenalina: string; shock: string; amiodarone: string } {
+  const adr = Math.min(kg * 0.01, 1);
+  const shock = Math.min(Math.round(kg * 4), 360);
+  const amio = Math.min(Math.round(kg * 5), 300);
+  return {
+    adrenalina: fmtMg(adr),
+    shock: `${shock} J`,
+    amiodarone: `${amio} mg`,
+  };
+}
+
 // ─── componente ─────────────────────────────────────────────────────────────
 
 export function ACRTimerModal({ onClose, weightKg }: ACRTimerModalProps) {
@@ -349,32 +368,40 @@ export function ACRTimerModal({ onClose, weightKg }: ACRTimerModalProps) {
           </div>
 
           {/* ── bottoni evento ── */}
-          <div className="grid grid-cols-2 gap-2 px-4 py-3">
-            <ActionBtn
-              label="Adrenalina"
-              onClick={() => addEvent('adrenalina')}
-              color="bg-rose-600 hover:bg-rose-500 active:bg-rose-700"
-              disabled={paused}
-            />
-            <ActionBtn
-              label="Shock"
-              onClick={() => addEvent('shock')}
-              color="bg-orange-600 hover:bg-orange-500 active:bg-orange-700"
-              disabled={paused}
-            />
-            <ActionBtn
-              label="Amiodarone"
-              onClick={() => addEvent('amiodarone')}
-              color="bg-fuchsia-600 hover:bg-fuchsia-500 active:bg-fuchsia-700"
-              disabled={paused}
-            />
-            <ActionBtn
-              label="ROSC"
-              onClick={pressROSC}
-              color="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700"
-              disabled={paused}
-            />
-          </div>
+          {(() => {
+            const doses = weightKg ? calcACRDoses(weightKg) : null;
+            return (
+              <div className="grid grid-cols-2 gap-2 px-4 py-3">
+                <ActionBtn
+                  label="Adrenalina"
+                  sublabel={doses?.adrenalina}
+                  onClick={() => addEvent('adrenalina')}
+                  color="bg-rose-600 hover:bg-rose-500 active:bg-rose-700"
+                  disabled={paused}
+                />
+                <ActionBtn
+                  label="Shock"
+                  sublabel={doses?.shock}
+                  onClick={() => addEvent('shock')}
+                  color="bg-orange-600 hover:bg-orange-500 active:bg-orange-700"
+                  disabled={paused}
+                />
+                <ActionBtn
+                  label="Amiodarone"
+                  sublabel={doses?.amiodarone}
+                  onClick={() => addEvent('amiodarone')}
+                  color="bg-fuchsia-600 hover:bg-fuchsia-500 active:bg-fuchsia-700"
+                  disabled={paused}
+                />
+                <ActionBtn
+                  label="ROSC"
+                  onClick={pressROSC}
+                  color="bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700"
+                  disabled={paused}
+                />
+              </div>
+            );
+          })()}
 
           {/* ── timeline ── */}
           <div className="flex-1 overflow-y-auto px-4 pb-3">
@@ -444,9 +471,10 @@ export function ACRTimerModal({ onClose, weightKg }: ACRTimerModalProps) {
 }
 
 function ActionBtn({
-  label, onClick, color, disabled = false,
+  label, sublabel, onClick, color, disabled = false,
 }: {
   label: string;
+  sublabel?: string;
   onClick: () => void;
   color: string;
   disabled?: boolean;
@@ -456,9 +484,16 @@ function ActionBtn({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className={`rounded-xl px-4 py-4 text-base font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${color}`}
+      className={`flex flex-col items-center justify-center rounded-xl px-4 py-3 text-white transition disabled:cursor-not-allowed disabled:opacity-40 ${color}`}
     >
-      {label === 'ROSC' ? '✓ ROSC' : `+ ${label}`}
+      <span className="text-base font-bold leading-tight">
+        {label === 'ROSC' ? '✓ ROSC' : `+ ${label}`}
+      </span>
+      {sublabel && (
+        <span className="mt-0.5 text-sm font-semibold opacity-90 tabular-nums">
+          {sublabel}
+        </span>
+      )}
     </button>
   );
 }
