@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { HomePage } from './pages/HomePage';
 import { DrugsPage } from './pages/DrugsPage';
 import { DrugDetailPage } from './pages/DrugDetailPage';
@@ -74,6 +75,7 @@ function App() {
       </footer>
 
       {showDisclaimer && <DisclaimerModal onClose={() => setShowDisclaimer(false)} />}
+      <Analytics />
     </div>
     </PatientProvider>
   );
