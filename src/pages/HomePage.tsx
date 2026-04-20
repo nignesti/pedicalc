@@ -193,6 +193,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
                     type="button"
                     onClick={() => {
                       setWeight(String(estimated));
+                      if (estimateAge) {
+                        setAge(estimateAge);
+                        setAgeUnit(estimateUnit);
+                      }
                       setShowEstimate(false);
                     }}
                     className="rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white hover:bg-brand-700 transition"

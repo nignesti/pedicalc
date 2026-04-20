@@ -8,6 +8,7 @@
 import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
+import { PatientChip } from '../components/PatientChip';
 import { getDrugById } from '../data/drugs';
 import { calculate, CalculationError } from '../lib/calculator';
 import type { DosageRule } from '../types/drug';
@@ -204,15 +205,26 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
 
   const [timerOpen, setTimerOpen] = useState(false);
 
-  // Accordion: tutte le sezioni aperte di default
-  const [openSections, setOpenSections] = useState<Set<SectionName>>(
-    () => new Set(SECTION_ORDER)
-  );
+  const [openSections, setOpenSections] = useState<Set<SectionName>>(() => {
+    try {
+      const saved = localStorage.getItem('pedicalc-summary-sections');
+      if (saved) {
+        const parsed = JSON.parse(saved) as string[];
+        const valid = parsed.filter((s): s is SectionName =>
+          (SECTION_ORDER as readonly string[]).includes(s)
+        );
+        return new Set(valid);
+      }
+    } catch {}
+    return new Set(SECTION_ORDER);
+  });
+
   function toggleSection(name: SectionName) {
     setOpenSections((prev) => {
       const next = new Set(prev);
       if (next.has(name)) next.delete(name);
       else next.add(name);
+      try { localStorage.setItem('pedicalc-summary-sections', JSON.stringify([...next])); } catch {}
       return next;
     });
   }
@@ -252,7 +264,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           </div>
           <h1 className="text-lg font-bold text-slate-900 dark:text-slate-100 sm:text-xl">Emergenza</h1>
         </div>
-        <div className="w-16" />
+        <PatientChip />
       </div>
 
       {!hasWeight && (
@@ -388,7 +400,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                         <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
                         <span className="flex items-center gap-1.5">
                           {capped && (
-                            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                               MAX
                             </span>
                           )}
