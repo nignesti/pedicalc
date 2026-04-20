@@ -10,7 +10,7 @@ import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
 import { PatientChip } from '../components/PatientChip';
 import { getDrugById } from '../data/drugs';
-import { calculate, CalculationError } from '../lib/calculator';
+import { calculate, CalculationError, formatDosePerKg } from '../lib/calculator';
 import type { DosageRule } from '../types/drug';
 import { findBand, DeviceSelectorError } from '../lib/deviceSelector';
 import { calculateVitalSigns, VitalSignsError } from '../lib/vitalSigns';
@@ -167,7 +167,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
     if (!hasWeight) return [];
     return SUMMARY_ENTRIES.map((entry) => {
       const rule = getRule(entry, weightNum);
-      if (!rule) return { entry, value: '—', unit: '', route: '', capped: false };
+      if (!rule) return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
       try {
         const result = calculate(rule, { weightKg: weightNum, ageYears });
         const first = result.entries[0];
@@ -177,10 +177,11 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           unit: first.unit,
           route: first.route ?? '',
           capped: first.note?.includes('massima') ?? false,
+          dosePerKg: formatDosePerKg(rule, ageYears),
         };
       } catch (e) {
-        if (e instanceof CalculationError) return { entry, value: '—', unit: '', route: '', capped: false };
-        return { entry, value: '—', unit: '', route: '', capped: false };
+        if (e instanceof CalculationError) return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
+        return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
       }
     });
   }, [hasWeight, weightNum, ageYears]);
@@ -398,21 +399,26 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                         className="flex items-center justify-between gap-2"
                       >
                         <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
-                        <span className="flex items-center gap-1.5">
-                          {capped && (
-                            <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                              MAX
+                        <div className="flex flex-col items-end gap-0.5">
+                          <span className="flex items-center gap-1.5">
+                            {capped && (
+                              <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                                MAX
+                              </span>
+                            )}
+                            <span className={`text-base font-bold ${s.text}`}>
+                              {value} {unit}
                             </span>
-                          )}
-                          <span className={`text-base font-bold ${s.text}`}>
-                            {value} {unit}
+                            {route && (
+                              <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
+                                {route}
+                              </span>
+                            )}
                           </span>
-                          {route && (
-                            <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
-                              {route}
-                            </span>
+                          {dosePerKg && (
+                            <span className={`text-xs opacity-50 ${s.text}`}>{dosePerKg}</span>
                           )}
-                        </span>
+                        </div>
                       </div>
                     ))}
                   </div>

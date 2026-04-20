@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { getDrugById } from '../data/drugs';
 import { PatientChip } from '../components/PatientChip';
-import { calculate, CalculationError } from '../lib/calculator';
+import { calculate, CalculationError, formatDosePerKg } from '../lib/calculator';
 import type { CalculationResult } from '../lib/calculator';
 import type { DosageRule, Indication } from '../types/drug';
 import { usePatient } from '../context/PatientContext';
@@ -264,6 +264,14 @@ export function DrugDetailPage({ drugId, onNavigate }: DrugDetailPageProps) {
                 </div>
               ))}
             </div>
+            {activeRule && (() => {
+              const dpk = formatDosePerKg(activeRule, age ? parseFloat(age) : undefined);
+              return dpk ? (
+                <p className="mt-2 text-xs text-brand-700/60 dark:text-brand-300/60">
+                  Rateo: {dpk}
+                </p>
+              ) : null;
+            })()}
             {result.entries.some((e) => e.note) && (
               <ul className="mt-3 space-y-1 text-xs text-brand-900 dark:text-brand-200">
                 {result.entries

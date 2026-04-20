@@ -197,6 +197,28 @@ function calculateWeightAge(
   };
 }
 
+/**
+ * Restituisce il rateo dose/kg come stringa leggibile, o null per regole
+ * non esprimibili in mg/kg (weight-band, shock).
+ */
+export function formatDosePerKg(rule: DosageRule, ageYears?: number): string | null {
+  switch (rule.kind) {
+    case 'weight-based':
+      return `${rule.factor} ${rule.unit}/kg`;
+    case 'weight-range':
+      return `${rule.factorMin}–${rule.factorMax} ${rule.unit}/kg`;
+    case 'weight-age': {
+      if (ageYears === undefined) return null;
+      const band = rule.bands.find((b) => ageYears <= b.maxAgeYears);
+      if (!band) return null;
+      return `${band.factor} ${rule.unit}/kg`;
+    }
+    case 'shock':
+    case 'weight-band':
+      return null;
+  }
+}
+
 function calculateShock(
   rule: Extract<DosageRule, { kind: 'shock' }>,
   input: CalculationInput
