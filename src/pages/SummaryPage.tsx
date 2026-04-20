@@ -393,7 +393,7 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                 {/* Contenuto collassabile */}
                 {isOpen && (
                   <div className="space-y-2 px-4 pb-4">
-                    {items.map(({ entry, value, unit, route, capped }) => (
+                    {items.map(({ entry, value, unit, route, capped, dosePerKg }) => (
                       <div
                         key={`${entry.drugId}-${entry.section}-${entry.label}`}
                         className="flex items-center justify-between gap-2"

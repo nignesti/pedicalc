@@ -14,6 +14,7 @@ import { APGARPage } from './pages/APGARPage';
 import { AboutPage } from './pages/AboutPage';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
 import { DisclaimerModal } from './components/DisclaimerModal';
+import { InstallModal } from './components/InstallModal';
 import { PatientProvider } from './context/PatientContext';
 
 export type View =
@@ -33,6 +34,7 @@ export type View =
 function App() {
   const [view, setView] = useState<View>({ name: 'home' });
   const [showDisclaimer, setShowDisclaimer] = useState(false);
+  const [showInstall, setShowInstall] = useState(false);
 
   return (
     <PatientProvider>
@@ -71,10 +73,22 @@ function App() {
           >
             Disclaimer
           </button>
+          <span aria-hidden="true" className="text-slate-300 dark:text-slate-600">·</span>
+          <button
+            type="button"
+            onClick={() => setShowInstall(true)}
+            className="inline-flex items-center gap-1 font-medium text-brand-600 underline-offset-2 hover:underline dark:text-brand-400"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5" aria-hidden="true">
+              <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 0 1 .67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 1 1-.671-1.34l.041-.022ZM12 9a.75.75 0 1 0 0-1.5A.75.75 0 0 0 12 9Z" clipRule="evenodd" />
+            </svg>
+            Installa
+          </button>
         </div>
       </footer>
 
       {showDisclaimer && <DisclaimerModal onClose={() => setShowDisclaimer(false)} />}
+      {showInstall && <InstallModal onClose={() => setShowInstall(false)} />}
       <Analytics />
     </div>
     </PatientProvider>
