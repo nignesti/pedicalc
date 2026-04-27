@@ -123,13 +123,31 @@ function fmtMg(mg: number): string {
   return parseFloat(s) + ' mg';
 }
 
-function calcACRDoses(kg: number): { adrenalina: string; shock: string; amiodarone: string } {
+/** Progressione scariche: 2-4-6-8-10 J/kg con cap 250 J dalla 3ª in poi. */
+const SHOCK_FACTORS: Array<{ factor: number; maxDose?: number }> = [
+  { factor: 2 },
+  { factor: 4 },
+  { factor: 6, maxDose: 250 },
+  { factor: 8, maxDose: 250 },
+  { factor: 10, maxDose: 250 },
+];
+
+/**
+ * Calcola la dose della prossima scarica da erogare.
+ * shockCount = numero di shock già registrati (0 = nessuno ancora).
+ * Oltre il 5° rimane sempre al livello 5 (10 J/kg).
+ */
+function calcNextShockDose(kg: number, shockCount: number): string {
+  const { factor, maxDose } = SHOCK_FACTORS[Math.min(shockCount, 4)];
+  const raw = Math.round(kg * factor);
+  return `${maxDose !== undefined ? Math.min(raw, maxDose) : raw} J`;
+}
+
+function calcACRDoses(kg: number): { adrenalina: string; amiodarone: string } {
   const adr = Math.min(kg * 0.01, 1);
-  const shock = Math.min(Math.round(kg * 4), 360);
   const amio = Math.min(Math.round(kg * 5), 300);
   return {
     adrenalina: fmtMg(adr),
-    shock: `${shock} J`,
     amiodarone: `${amio} mg`,
   };
 }
@@ -370,6 +388,9 @@ export function ACRTimerModal({ onClose, weightKg }: ACRTimerModalProps) {
           {/* ── bottoni evento ── */}
           {(() => {
             const doses = weightKg ? calcACRDoses(weightKg) : null;
+            const shockCount = events.filter((e) => e.type === 'shock').length;
+            const nextShockNum = Math.min(shockCount + 1, 5);
+            const nextShockDose = weightKg ? calcNextShockDose(weightKg, shockCount) : undefined;
             return (
               <div className="grid grid-cols-2 gap-2 px-4 py-3">
                 <ActionBtn
@@ -380,8 +401,8 @@ export function ACRTimerModal({ onClose, weightKg }: ACRTimerModalProps) {
                   disabled={paused}
                 />
                 <ActionBtn
-                  label="Shock"
-                  sublabel={doses?.shock}
+                  label={`${nextShockNum}° shock`}
+                  sublabel={nextShockDose}
                   onClick={() => addEvent('shock')}
                   color="bg-orange-600 hover:bg-orange-500 active:bg-orange-700"
                   disabled={paused}
