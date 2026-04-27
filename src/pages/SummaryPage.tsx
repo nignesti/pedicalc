@@ -167,21 +167,17 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
     if (!hasWeight) return [];
     return SUMMARY_ENTRIES.map((entry) => {
       const rule = getRule(entry, weightNum);
-      if (!rule) return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
+      if (!rule) return { entry, entries: [], dosePerKg: null };
       try {
         const result = calculate(rule, { weightKg: weightNum, ageYears });
-        const first = result.entries[0];
         return {
           entry,
-          value: first.value,
-          unit: first.unit,
-          route: first.route ?? '',
-          capped: first.note?.includes('massima') ?? false,
+          entries: result.entries,
           dosePerKg: formatDosePerKg(rule, ageYears),
         };
       } catch (e) {
-        if (e instanceof CalculationError) return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
-        return { entry, value: '—', unit: '', route: '', capped: false, dosePerKg: null };
+        if (e instanceof CalculationError) return { entry, entries: [], dosePerKg: null };
+        return { entry, entries: [], dosePerKg: null };
       }
     });
   }, [hasWeight, weightNum, ageYears]);
@@ -393,34 +389,70 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
                 {/* Contenuto collassabile */}
                 {isOpen && (
                   <div className="space-y-2 px-4 pb-4">
-                    {items.map(({ entry, value, unit, route, capped, dosePerKg }) => (
-                      <div
-                        key={`${entry.drugId}-${entry.section}-${entry.label}`}
-                        className="flex items-center justify-between gap-2"
-                      >
-                        <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
-                        <div className="flex flex-col items-end gap-0.5">
-                          <span className="flex items-center gap-1.5">
-                            {capped && (
-                              <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                                MAX
+                    {items.map(({ entry, entries, dosePerKg }) => {
+                      if (entries.length === 0) return null;
+
+                      // Layout multi-riga (es. defibrillazione con 5 scariche)
+                      if (entries.length > 1) {
+                        return (
+                          <div key={`${entry.drugId}-${entry.section}-${entry.label}`}>
+                            <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
+                            <div className="mt-1 space-y-1 pl-1">
+                              {entries.map((e, i) => {
+                                const capped = e.note?.includes('massima') ?? false;
+                                return (
+                                  <div key={i} className="flex items-baseline justify-between gap-4">
+                                    <span className={`text-xs opacity-70 ${s.text}`}>{e.label}</span>
+                                    <span className="flex items-center gap-1.5">
+                                      {capped && (
+                                        <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                                          MAX
+                                        </span>
+                                      )}
+                                      <span className={`text-sm font-bold ${s.text}`}>
+                                        {e.value} {e.unit}
+                                      </span>
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      // Layout singola riga (tutti gli altri farmaci)
+                      const first = entries[0];
+                      const capped = first.note?.includes('massima') ?? false;
+                      return (
+                        <div
+                          key={`${entry.drugId}-${entry.section}-${entry.label}`}
+                          className="flex items-center justify-between gap-2"
+                        >
+                          <span className={`text-sm font-medium ${s.text}`}>{entry.label}</span>
+                          <div className="flex flex-col items-end gap-0.5">
+                            <span className="flex items-center gap-1.5">
+                              {capped && (
+                                <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                                  MAX
+                                </span>
+                              )}
+                              <span className={`text-base font-bold ${s.text}`}>
+                                {first.value} {first.unit}
                               </span>
-                            )}
-                            <span className={`text-base font-bold ${s.text}`}>
-                              {value} {unit}
+                              {first.route && (
+                                <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
+                                  {first.route}
+                                </span>
+                              )}
                             </span>
-                            {route && (
-                              <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${s.badge}`}>
-                                {route}
-                              </span>
+                            {dosePerKg && (
+                              <span className={`text-xs opacity-50 ${s.text}`}>{dosePerKg}</span>
                             )}
-                          </span>
-                          {dosePerKg && (
-                            <span className={`text-xs opacity-50 ${s.text}`}>{dosePerKg}</span>
-                          )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </div>
