@@ -258,9 +258,9 @@ export const drugs: Drug[] = [
           shocks: [
             { label: '1ª scarica', factorMin: 2 },
             { label: '2ª scarica', factorMin: 4 },
-            { label: '3ª scarica', factorMin: 6 },
-            { label: '4ª scarica', factorMin: 8 },
-            { label: '5ª scarica', factorMin: 10 },
+            { label: '3ª scarica', factorMin: 6, maxDose: 250 },
+            { label: '4ª scarica', factorMin: 8, maxDose: 250 },
+            { label: '5ª scarica', factorMin: 10, maxDose: 250 },
           ],
           notes: 'Dose iniziale 2 J/kg, successive 4 J/kg fino a 10 J/kg.',
         },

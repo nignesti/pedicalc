@@ -114,6 +114,8 @@ export interface ShockRule {
     label: string;
     factorMin: number;
     factorMax?: number;
+    /** Dose massima assoluta in joule per questa scarica. */
+    maxDose?: number;
   }>;
   unit: 'J';
   notes?: string;

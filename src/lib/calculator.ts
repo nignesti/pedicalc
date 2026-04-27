@@ -225,11 +225,16 @@ function calculateShock(
 ): CalculationResult {
   const entries: ResultEntry[] = rule.shocks.map((s) => {
     if (s.factorMax === undefined) {
-      const value = Math.round(input.weightKg * s.factorMin);
+      const raw = Math.round(input.weightKg * s.factorMin);
+      const value = s.maxDose !== undefined ? Math.min(raw, s.maxDose) : raw;
+      const note = s.maxDose !== undefined && raw > s.maxDose
+        ? `Dose massima ${s.maxDose} ${rule.unit} applicata`
+        : undefined;
       return {
         label: s.label,
         value: String(value),
         unit: rule.unit,
+        note,
       };
     }
     const vMin = Math.round(input.weightKg * s.factorMin);
