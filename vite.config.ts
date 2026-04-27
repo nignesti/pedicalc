@@ -44,6 +44,16 @@ export default defineConfig({
       },
     }),
   ],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'analytics': ['@vercel/analytics/react'],
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
