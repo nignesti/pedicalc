@@ -1,21 +1,32 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { HomePage } from './pages/HomePage';
-import { DrugsPage } from './pages/DrugsPage';
-import { DrugDetailPage } from './pages/DrugDetailPage';
-import { VitalSignsPage } from './pages/VitalSignsPage';
-import { DevicesPage } from './pages/DevicesPage';
-import { SummaryPage } from './pages/SummaryPage';
-import { GCSPage } from './pages/GCSPage';
-import { VenturiPage } from './pages/VenturiPage';
-import { ETTPage } from './pages/ETTPage';
-import { AntidotesPage } from './pages/AntidotesPage';
-import { APGARPage } from './pages/APGARPage';
-import { AboutPage } from './pages/AboutPage';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
 import { DisclaimerModal } from './components/DisclaimerModal';
 import { InstallModal } from './components/InstallModal';
 import { PatientProvider } from './context/PatientContext';
+
+// Pagine secondarie caricate on-demand: ogni pagina diventa un chunk separato,
+// ridotto sul first load. HomePage resta eager perché è la rotta iniziale.
+const DrugsPage = lazy(() => import('./pages/DrugsPage').then(m => ({ default: m.DrugsPage })));
+const DrugDetailPage = lazy(() => import('./pages/DrugDetailPage').then(m => ({ default: m.DrugDetailPage })));
+const VitalSignsPage = lazy(() => import('./pages/VitalSignsPage').then(m => ({ default: m.VitalSignsPage })));
+const DevicesPage = lazy(() => import('./pages/DevicesPage').then(m => ({ default: m.DevicesPage })));
+const SummaryPage = lazy(() => import('./pages/SummaryPage').then(m => ({ default: m.SummaryPage })));
+const GCSPage = lazy(() => import('./pages/GCSPage').then(m => ({ default: m.GCSPage })));
+const VenturiPage = lazy(() => import('./pages/VenturiPage').then(m => ({ default: m.VenturiPage })));
+const ETTPage = lazy(() => import('./pages/ETTPage').then(m => ({ default: m.ETTPage })));
+const AntidotesPage = lazy(() => import('./pages/AntidotesPage').then(m => ({ default: m.AntidotesPage })));
+const APGARPage = lazy(() => import('./pages/APGARPage').then(m => ({ default: m.APGARPage })));
+const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+
+function PageFallback() {
+  return (
+    <div className="flex h-64 items-center justify-center" aria-label="Caricamento">
+      <div className="h-8 w-8 animate-spin rounded-full border-2 border-brand-300 border-t-brand-600" />
+    </div>
+  );
+}
 
 export type View =
   | { name: 'home' }
@@ -42,20 +53,22 @@ function App() {
       <DisclaimerBanner onNavigate={setView} />
 
       <main className="flex-1">
-        {view.name === 'home' && <HomePage onNavigate={setView} />}
-        {view.name === 'summary' && <SummaryPage onNavigate={setView} />}
-        {view.name === 'drugs' && <DrugsPage onNavigate={setView} />}
-        {view.name === 'drug-detail' && (
-          <DrugDetailPage drugId={view.drugId} onNavigate={setView} />
-        )}
-        {view.name === 'vital-signs' && <VitalSignsPage onNavigate={setView} />}
-        {view.name === 'gcs' && <GCSPage onNavigate={setView} />}
-        {view.name === 'apgar' && <APGARPage onNavigate={setView} />}
-        {view.name === 'devices' && <DevicesPage onNavigate={setView} />}
-        {view.name === 'venturi' && <VenturiPage onNavigate={setView} />}
-        {view.name === 'ett' && <ETTPage onNavigate={setView} />}
-        {view.name === 'antidotes' && <AntidotesPage onNavigate={setView} />}
-        {view.name === 'about' && <AboutPage onNavigate={setView} />}
+        <Suspense fallback={<PageFallback />}>
+          {view.name === 'home' && <HomePage onNavigate={setView} />}
+          {view.name === 'summary' && <SummaryPage onNavigate={setView} />}
+          {view.name === 'drugs' && <DrugsPage onNavigate={setView} />}
+          {view.name === 'drug-detail' && (
+            <DrugDetailPage drugId={view.drugId} onNavigate={setView} />
+          )}
+          {view.name === 'vital-signs' && <VitalSignsPage onNavigate={setView} />}
+          {view.name === 'gcs' && <GCSPage onNavigate={setView} />}
+          {view.name === 'apgar' && <APGARPage onNavigate={setView} />}
+          {view.name === 'devices' && <DevicesPage onNavigate={setView} />}
+          {view.name === 'venturi' && <VenturiPage onNavigate={setView} />}
+          {view.name === 'ett' && <ETTPage onNavigate={setView} />}
+          {view.name === 'antidotes' && <AntidotesPage onNavigate={setView} />}
+          {view.name === 'about' && <AboutPage onNavigate={setView} />}
+        </Suspense>
       </main>
 
       <footer className="border-t border-slate-200 bg-white pt-4 pb-safe-or-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400">
