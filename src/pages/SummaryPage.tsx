@@ -5,7 +5,7 @@
  * in base al peso (e opzionalmente età) dal PatientContext.
  */
 
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
 import { PatientChip } from '../components/PatientChip';
@@ -14,7 +14,10 @@ import { calculate, CalculationError, formatDosePerKg } from '../lib/calculator'
 import type { DosageRule } from '../types/drug';
 import { findBand, DeviceSelectorError } from '../lib/deviceSelector';
 import { calculateVitalSigns, VitalSignsError } from '../lib/vitalSigns';
-import { ACRTimerModal } from '../components/ACRTimerModal';
+// Lazy: il modal è 500 LOC e si carica solo quando l'utente apre il Timer ACR.
+const ACRTimerModal = lazy(() =>
+  import('../components/ACRTimerModal').then(m => ({ default: m.ACRTimerModal }))
+);
 
 interface SummaryPageProps {
   onNavigate: (view: View) => void;
@@ -460,7 +463,9 @@ export function SummaryPage({ onNavigate }: SummaryPageProps) {
           })}
 
           {timerOpen && (
-            <ACRTimerModal onClose={() => setTimerOpen(false)} weightKg={weightNum} />
+            <Suspense fallback={null}>
+              <ACRTimerModal onClose={() => setTimerOpen(false)} weightKg={weightNum} />
+            </Suspense>
           )}
 
           {/* Link dettaglio */}
