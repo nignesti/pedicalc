@@ -224,7 +224,7 @@ export function ETTPage({ onNavigate }: ETTPageProps) {
                   colorClass="text-indigo-900 dark:text-indigo-100"
                 />
                 <Row
-                  label="Narinare"
+                  label="Narinare (IOT Nasale)"
                   value={`${result.depthNasal} cm`}
                   colorClass="text-indigo-900 dark:text-indigo-100"
                   isLast
