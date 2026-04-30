@@ -95,15 +95,20 @@ function buildSummary(
   events: TimelineEvent[],
   weightKg?: number
 ): string {
-  const dstr = new Date(startedAt).toLocaleString('it-IT', {
-    dateStyle: 'short',
-    timeStyle: 'short',
-  });
+  const fmt = (epoch: number) =>
+    new Date(epoch).toLocaleString('it-IT', {
+      dateStyle: 'short',
+      timeStyle: 'short',
+    });
+
+  const roscEvent = events.find((e) => e.type === 'rosc');
+
   const lines: string[] = [
     'ACR — Riepilogo evento',
-    `Inizio: ${dstr}`,
+    `Inizio: ${fmt(startedAt)}`,
     ...(weightKg ? [`Peso: ${weightKg} kg`] : []),
     `Durata totale: ${formatTime(elapsedMs)}`,
+    ...(roscEvent ? [`ROSC: ${fmt(roscEvent.at)}`] : []),
     '',
     'Cronologia interventi:',
     ...(events.length === 0

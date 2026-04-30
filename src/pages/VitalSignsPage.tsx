@@ -176,6 +176,28 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
             <span className="text-2xl text-pink-500 dark:text-pink-400 transition group-hover:translate-x-1">→</span>
           </button>
         </div>
+
+        {/* Pulsante qSOFA */}
+        <div className="mt-3">
+          <button
+            type="button"
+            onClick={() => onNavigate({ name: 'qsofa' })}
+            className="group flex w-full items-center justify-between rounded-2xl border-2 border-teal-200 bg-teal-50 px-5 py-4 text-left transition hover:-translate-y-0.5 hover:shadow-md dark:border-teal-700 dark:bg-teal-950/30"
+          >
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-teal-500 dark:text-teal-400">
+                Strumento
+              </p>
+              <p className="text-base font-bold text-teal-900 dark:text-teal-100">
+                qSOFA
+              </p>
+              <p className="text-xs text-teal-700/70 dark:text-teal-300/70">
+                Screening rapido per sospetta sepsi
+              </p>
+            </div>
+            <span className="text-2xl text-teal-500 dark:text-teal-400 transition group-hover:translate-x-1">→</span>
+          </button>
+        </div>
       </div>
     </div>
   );

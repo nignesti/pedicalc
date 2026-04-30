@@ -22,6 +22,7 @@ const ETTPage = lazy(() => import('./pages/ETTPage').then(m => ({ default: m.ETT
 const AntidotesPage = lazy(() => import('./pages/AntidotesPage').then(m => ({ default: m.AntidotesPage })));
 const APGARPage = lazy(() => import('./pages/APGARPage').then(m => ({ default: m.APGARPage })));
 const AboutPage = lazy(() => import('./pages/AboutPage').then(m => ({ default: m.AboutPage })));
+const QSofaPage = lazy(() => import('./pages/QSofaPage').then(m => ({ default: m.QSofaPage })));
 
 function PageFallback() {
   return (
@@ -43,7 +44,8 @@ export type View =
   | { name: 'venturi' }
   | { name: 'ett' }
   | { name: 'antidotes' }
-  | { name: 'about' };
+  | { name: 'about' }
+  | { name: 'qsofa' };
 
 function App() {
   const [view, setView] = useState<View>({ name: 'home' });
@@ -71,6 +73,7 @@ function App() {
           {view.name === 'ett' && <ETTPage onNavigate={setView} />}
           {view.name === 'antidotes' && <AntidotesPage onNavigate={setView} />}
           {view.name === 'about' && <AboutPage onNavigate={setView} />}
+          {view.name === 'qsofa' && <QSofaPage onNavigate={setView} />}
         </Suspense>
       </main>
 
