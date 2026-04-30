@@ -4,27 +4,40 @@ import { calculateVitalSigns, VitalSignsError } from '../lib/vitalSigns';
 import type { VitalSignsResult } from '../lib/vitalSigns';
 import { usePatient } from '../context/PatientContext';
 import { PatientChip } from '../components/PatientChip';
+import { estimateAgeFromWeight } from '../lib/calculator';
 
 interface VitalSignsPageProps {
   onNavigate: (view: View) => void;
 }
 
 export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
-  const { age: value, setAge: setValue, ageUnit: unit, setAgeUnit: setUnit } = usePatient();
+  const { age: value, setAge: setValue, ageUnit: unit, setAgeUnit: setUnit, weight } = usePatient();
+
+  // Se l'età non è inserita ma il peso sì, stima l'età dal peso (APLS inversa)
+  const weightNum = parseFloat(weight);
+  const ageEstimate = useMemo(() => {
+    if (value !== '') return null; // età reale disponibile, non serve la stima
+    if (!Number.isFinite(weightNum) || weightNum <= 0) return null;
+    return estimateAgeFromWeight(weightNum);
+  }, [value, weightNum]);
+
+  // Usa età reale se disponibile, altrimenti quella stimata
+  const effectiveValue = value !== '' ? value : (ageEstimate ? String(ageEstimate.value) : '');
+  const effectiveUnit  = value !== '' ? unit  : (ageEstimate ? ageEstimate.unit : unit);
 
   const { result, error } = useMemo<{
     result: VitalSignsResult | null;
     error: string | null;
   }>(() => {
-    const v = parseFloat(value);
+    const v = parseFloat(effectiveValue);
     if (!Number.isFinite(v) || v < 0) return { result: null, error: null };
     try {
-      return { result: calculateVitalSigns({ value: v, unit }), error: null };
+      return { result: calculateVitalSigns({ value: v, unit: effectiveUnit }), error: null };
     } catch (e) {
       if (e instanceof VitalSignsError) return { result: null, error: e.message };
       return { result: null, error: 'Errore nel calcolo' };
     }
-  }, [value, unit]);
+  }, [effectiveValue, effectiveUnit]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6">
@@ -111,8 +124,18 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
           </div>
         )}
 
+        {ageEstimate && result && (
+          <div className="mt-4 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+            <span className="mt-0.5">⚠</span>
+            <span>
+              Età stimata dal peso: <strong>{ageEstimate.label}</strong> (formula APLS inversa).
+              Inserisci l'età reale per maggior precisione.
+            </span>
+          </div>
+        )}
+
         {result && (
-          <div className="mt-6 rounded-2xl border-2 border-rose-200 bg-rose-50 p-5 dark:border-rose-800 dark:bg-rose-950/40">
+          <div className="mt-4 rounded-2xl border-2 border-rose-200 bg-rose-50 p-5 dark:border-rose-800 dark:bg-rose-950/40">
             <p className="text-xs font-semibold uppercase tracking-wide text-rose-700 dark:text-rose-300">
               Fascia d'età: {result.ageRangeLabel}
             </p>

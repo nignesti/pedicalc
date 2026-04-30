@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
 
@@ -6,29 +5,8 @@ interface HomePageProps {
   onNavigate: (view: View) => void;
 }
 
-/** Stima peso (kg) in base all'età. Restituisce null se fuori range. */
-function estimateWeight(ageValue: string, ageUnit: 'anni' | 'mesi'): number | null {
-  const v = parseFloat(ageValue);
-  if (!Number.isFinite(v) || v <= 0) return null;
-  const months = ageUnit === 'mesi' ? v : v * 12;
-  if (months < 1) return null;
-  if (months < 12) return Math.round((months / 2 + 4) * 10) / 10;
-  const years = months / 12;
-  if (years <= 5) return Math.round((years * 2 + 8) * 10) / 10;
-  if (years <= 12) return Math.round((years * 3 + 7) * 10) / 10;
-  return null;
-}
-
 export function HomePage({ onNavigate }: HomePageProps) {
   const { weight, setWeight, age, setAge, ageUnit, setAgeUnit, reset } = usePatient();
-  const [showEstimate, setShowEstimate] = useState(false);
-  const [estimateAge, setEstimateAge] = useState('');
-  const [estimateUnit, setEstimateUnit] = useState<'anni' | 'mesi'>('anni');
-
-  const estimated = useMemo(
-    () => estimateWeight(estimateAge, estimateUnit),
-    [estimateAge, estimateUnit]
-  );
 
   const hasPatient = weight !== '' || age !== '';
 
@@ -98,7 +76,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               className="mb-1 block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400"
             >
               Età{' '}
-              <span className="normal-case font-normal text-slate-400 dark:text-slate-500">(opzionale)</span>
+              <span className="normal-case font-normal text-slate-400 dark:text-slate-500">(se peso non disponibile)</span>
             </label>
             <div className="flex gap-2">
               <input
@@ -140,79 +118,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </div>
         </div>
 
-        {/* Stima peso */}
-        <div className="mt-3">
-          <button
-            type="button"
-            onClick={() => setShowEstimate((v) => !v)}
-            className="rounded-lg px-2 py-1.5 text-xs font-medium text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 transition"
-          >
-            {showEstimate ? '▲ Nascondi stima' : '▼ Non conosci il peso? Stimalo dall\'età'}
-          </button>
-
-          {showEstimate && (
-            <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-800/50">
-              <p className="mb-3 text-xs text-slate-500 dark:text-slate-400">
-                Formula APLS — stima approssimativa, valida 1 mese–12 anni
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <input
-                  type="number"
-                  inputMode="numeric"
-                  min="0"
-                  step="1"
-                  value={estimateAge}
-                  onChange={(e) => setEstimateAge(e.target.value)}
-                  className="input-field w-24"
-                  placeholder="Età"
-                />
-                <button
-                  type="button"
-                  onClick={() => setEstimateUnit('anni')}
-                  className={`rounded-xl border px-3 py-2 text-xs font-semibold transition ${
-                    estimateUnit === 'anni'
-                      ? 'pill-selected'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200'
-                  }`}
-                >
-                  anni
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEstimateUnit('mesi')}
-                  className={`rounded-xl border px-3 py-2 text-xs font-semibold transition ${
-                    estimateUnit === 'mesi'
-                      ? 'pill-selected'
-                      : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200'
-                  }`}
-                >
-                  mesi
-                </button>
-                {estimated !== null && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setWeight(String(estimated));
-                      if (estimateAge) {
-                        setAge(estimateAge);
-                        setAgeUnit(estimateUnit);
-                      }
-                      setShowEstimate(false);
-                    }}
-                    className="rounded-xl bg-brand-600 px-4 py-2 text-xs font-semibold text-white hover:bg-brand-700 transition"
-                  >
-                    Usa {estimated} kg
-                  </button>
-                )}
-              </div>
-              {estimateAge && estimated === null && (
-                <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-                  Età fuori range (valida 1 mese–12 anni)
-                </p>
-              )}
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Sezioni */}

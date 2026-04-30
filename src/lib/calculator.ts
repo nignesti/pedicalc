@@ -198,6 +198,27 @@ function calculateWeightAge(
 }
 
 /**
+ * Stima l'età da un peso corporeo usando la formula APLS inversa.
+ * - < 4 kg : non stimabile (prematuro/neonato sottopeso)
+ * - 4–7.9 kg : formula infant → mesi = (kg − 4) × 2
+ * - ≥ 8 kg : formula pediatrica → anni = kg / 2 − 4
+ * Restituisce null se fuori range stimabile.
+ */
+export function estimateAgeFromWeight(
+  kg: number
+): { value: number; unit: 'anni' | 'mesi'; label: string } | null {
+  if (!Number.isFinite(kg) || kg <= 0) return null;
+  if (kg < 4) return null; // prematuro/neonato sottopeso
+  if (kg < 8) {
+    const months = Math.round((kg - 4) * 2);
+    return { value: months, unit: 'mesi', label: `~${months} mesi` };
+  }
+  const years = Math.round((kg / 2 - 4) * 10) / 10;
+  if (years > 14) return null; // fuori range pediatrico
+  return { value: years, unit: 'anni', label: `~${years} anni` };
+}
+
+/**
  * Restituisce il rateo dose/kg come stringa leggibile, o null per regole
  * non esprimibili in mg/kg (weight-band, shock).
  */
