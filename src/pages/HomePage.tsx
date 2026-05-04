@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import type { View } from '../App';
 import { usePatient } from '../context/PatientContext';
 
@@ -5,8 +6,22 @@ interface HomePageProps {
   onNavigate: (view: View) => void;
 }
 
+/** Stima peso (kg) da età — formula APLS. Restituisce null se fuori range. */
+function estimateWeight(ageValue: string, ageUnit: 'anni' | 'mesi'): number | null {
+  const v = parseFloat(ageValue);
+  if (!Number.isFinite(v) || v <= 0) return null;
+  const months = ageUnit === 'mesi' ? v : v * 12;
+  if (months < 1) return null;
+  if (months < 12) return Math.round((months / 2 + 4) * 10) / 10;
+  const years = months / 12;
+  if (years <= 5) return Math.round((years * 2 + 8) * 10) / 10;
+  if (years <= 12) return Math.round((years * 3 + 7) * 10) / 10;
+  return null;
+}
+
 export function HomePage({ onNavigate }: HomePageProps) {
   const { weight, setWeight, age, setAge, ageUnit, setAgeUnit, reset } = usePatient();
+  const [weightIsEstimated, setWeightIsEstimated] = useState(false);
 
   const hasPatient = weight !== '' || age !== '';
 
@@ -21,6 +36,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
     weight !== '' && Number.isFinite(weightNum) && weightNum > 100
       ? 'Peso insolito per un paziente pediatrico — verifica.'
       : null;
+
+  // Stima peso dall'età (solo se età è inserita)
+  const estimatedWeight = useMemo(
+    () => (age !== '' ? estimateWeight(age, ageUnit) : null),
+    [age, ageUnit]
+  );
+
+  // Mostra alert stima peso se: età inserita + (peso vuoto OPPURE peso è stato stimato)
+  const showWeightEstimate =
+    estimatedWeight !== null && (weight === '' || weightIsEstimated);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-6">
@@ -57,7 +82,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
               min="0"
               step="0.1"
               value={weight}
-              onChange={(e) => setWeight(e.target.value)}
+              onChange={(e) => {
+                setWeight(e.target.value);
+                setWeightIsEstimated(false);
+              }}
               className="input-field"
               placeholder="Es. 15"
             />
@@ -66,6 +94,30 @@ export function HomePage({ onNavigate }: HomePageProps) {
             )}
             {weightWarn && (
               <p className="mt-1 text-xs font-medium text-amber-600 dark:text-amber-400">{weightWarn}</p>
+            )}
+            {showWeightEstimate && (
+              weight === '' || !weightIsEstimated ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setWeight(String(estimatedWeight));
+                    setWeightIsEstimated(true);
+                  }}
+                  className="mt-2 flex w-full items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-left text-xs text-amber-800 transition hover:bg-amber-100 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200 dark:hover:bg-amber-950/60"
+                >
+                  <span className="mt-0.5">⚠</span>
+                  <span>
+                    Peso stimato per {ageNum} {ageUnit}: <strong>~{estimatedWeight} kg</strong> — tocca per inserire
+                  </span>
+                </button>
+              ) : (
+                <div className="mt-2 flex items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800 dark:border-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
+                  <span className="mt-0.5">⚠</span>
+                  <span>
+                    Peso stimato: <strong>~{estimatedWeight} kg</strong> (inserito automaticamente)
+                  </span>
+                </div>
+              )
             )}
           </div>
 

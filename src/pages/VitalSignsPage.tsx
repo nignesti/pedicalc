@@ -81,7 +81,7 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
               inputMode="numeric"
               min="0"
               step="1"
-              value={value}
+              value={effectiveValue}
               onChange={(e) => setValue(e.target.value)}
               className="input-field"
               placeholder="Es. 4"
@@ -96,7 +96,7 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
                 type="button"
                 onClick={() => setUnit('anni')}
                 className={`flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition ${
-                  unit === 'anni'
+                  effectiveUnit === 'anni'
                     ? 'pill-selected'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-brand-500 dark:hover:bg-slate-700'
                 }`}
@@ -107,7 +107,7 @@ export function VitalSignsPage({ onNavigate }: VitalSignsPageProps) {
                 type="button"
                 onClick={() => setUnit('mesi')}
                 className={`flex-1 rounded-xl border px-4 py-3 text-sm font-semibold transition ${
-                  unit === 'mesi'
+                  effectiveUnit === 'mesi'
                     ? 'pill-selected'
                     : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-brand-500 dark:hover:bg-slate-700'
                 }`}
